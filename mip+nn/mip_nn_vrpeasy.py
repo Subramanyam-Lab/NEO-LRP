@@ -10,7 +10,7 @@ import sys
 
 
 name_pattern = os.environ.get('name_pattern')
-log_dir = "log_files\mip_nn"
+log_dir = "log_files/mip_nn"
 os.makedirs(log_dir, exist_ok=True)
 # Directory containing the files
 directory_path = "data"
@@ -18,7 +18,7 @@ directory_path = "data"
 
 
 # Iterate through files in the directory
-existing_excel_file="results\neos_results.xlsx"
+existing_excel_file="results/neos_results.xlsx"
 workbook = openpyxl.load_workbook(existing_excel_file)
 
 # Select the worksheet where you want to append the new row
