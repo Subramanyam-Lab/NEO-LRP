@@ -18,7 +18,7 @@ directory_path = "data"
 
 
 # Iterate through files in the directory
-existing_excel_file=r"results\neos_results.xlsx"
+existing_excel_file="results\neos_results.xlsx"
 workbook = openpyxl.load_workbook(existing_excel_file)
 
 # Select the worksheet where you want to append the new row
