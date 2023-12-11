@@ -36,7 +36,8 @@ class createLRP ():
         #input data file location
         phi_loc=r'onnx_files\model_phi_modifed_loss_no_route_abs.onnx'
         rho_loc=r'onnx_files\model_rho_modifed_loss_no_route_abs.onnx'
-
+        logging.info(f"The phi file name:{phi_loc}\n")
+        logging.info(f"The rho file name:{rho_loc}\n")
         # #preparing for log file
         # input_file_base_name = os.path.basename(data_input_file)
 
