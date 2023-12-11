@@ -97,26 +97,26 @@ def flp(cust_no,depot_no,dep_cord,cus_cord,depot_capacity,cust_demand,facility_c
 
     return flp_cost,flp_dict,rout_dist,fac_cust_dem,cust_dem_fac
 
-if __name__=='__main__':
-    St_time=datetime.now()
-    print("Start time for FLP:",St_time)
-    ans=create_data("F:\Benchmark\B1\coord20-5-1b.dat")
-    customer_no=ans[0]
-    depotno=ans[1]
-    depot_cord=ans[2]
-    customer_cord=ans[3]
-    vehicle_capacity=ans[4]
-    depot_capacity=ans[5]
-    customer_demand=ans[6]
-    facilitycost=ans[7]
-    route_cost=ans[8]
-    rc_cal_index=ans[9]
-    a,b,c,d,e=flp(customer_no,depotno,depot_cord,customer_cord,depot_capacity,customer_demand,facilitycost,route_cost,rc_cal_index)
-    print("Facility solution value:",a,'\n')
-    print("Facility Customer assignment:",b,'\n')
-    print("Facility Customer distances:",c,'\n')
-    print("Total Demands on each facility",d,'\n')
-    print("Demands on each facility per assigned customers",e,'\n')
-    Ed_time=datetime.now()
-    print("Lrp Script Execution time:", (Ed_time-St_time).total_seconds())
+# if __name__=='__main__':
+#     St_time=datetime.now()
+#     print("Start time for FLP:",St_time)
+#     ans=create_data("F:\Benchmark\B1\coord20-5-1b.dat")
+#     customer_no=ans[0]
+#     depotno=ans[1]
+#     depot_cord=ans[2]
+#     customer_cord=ans[3]
+#     vehicle_capacity=ans[4]
+#     depot_capacity=ans[5]
+#     customer_demand=ans[6]
+#     facilitycost=ans[7]
+#     route_cost=ans[8]
+#     rc_cal_index=ans[9]
+#     a,b,c,d,e=flp(customer_no,depotno,depot_cord,customer_cord,depot_capacity,customer_demand,facilitycost,route_cost,rc_cal_index)
+#     print("Facility solution value:",a,'\n')
+#     print("Facility Customer assignment:",b,'\n')
+#     print("Facility Customer distances:",c,'\n')
+#     print("Total Demands on each facility",d,'\n')
+#     print("Demands on each facility per assigned customers",e,'\n')
+#     Ed_time=datetime.now()
+#     print("Lrp Script Execution time:", (Ed_time-St_time).total_seconds())
     
