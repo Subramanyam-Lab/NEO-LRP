@@ -17,7 +17,7 @@ import os
 import sys
 import openpyxl
 
-name_pattern = os.environ.get('name_pattern')
+#name_pattern = os.environ.get('name_pattern')
 class createLRP ():
     def __init__(self,ans):
         self.customer_no=ans[0]
@@ -71,6 +71,7 @@ class createLRP ():
 
         return facility_dict,big_m,rc_norm, initial_flp_assignment,phi_loc,rho_loc
 
+#generating initial solution through simple flp model for customer assignments and using a forward pass through phi and rho networks
     def warmstart(self,flp_assignment,init_route_cost,customer_cord,customer_demand,rc_cal_index,phi_net,rho_net):
         ws_dt_st=datetime.now()
         y_open=[]
