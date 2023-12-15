@@ -9,7 +9,7 @@ import logging
 import sys
 
 
-name_pattern = os.environ.get('name_pattern')
+#name_pattern = os.environ.get('name_pattern')
 log_dir = "log_files/ortools"
 os.makedirs(log_dir, exist_ok=True)
 # Directory containing the files
