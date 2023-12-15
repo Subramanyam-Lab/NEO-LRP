@@ -4,7 +4,7 @@ The GitHub repository has 6 folders:
 
 PS: Please change all the paths to complete file paths for the successful execution of the scripts.
 
-1) requirements: This folder has a file requirements.txt, which lists all the libraries that need to be installed to successfully execute all the scripts.
+1) requirements.txt: The file requirements.txt lists all the libraries that need to be installed to successfully execute all the scripts.
    
 2) data: This folder contains all the data used to obtain the results mentioned in the paper.
    
