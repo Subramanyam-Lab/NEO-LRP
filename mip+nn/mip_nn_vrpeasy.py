@@ -13,9 +13,7 @@ import sys
 log_dir = "log_files/mip_nn"
 os.makedirs(log_dir, exist_ok=True)
 # Directory containing the files
-directory_path = "/Users/waquarkaleem/NEOS-LRP-Codes-1/data"
-
-
+directory_path = "/Users/waquarkaleem/NEOS-LRP-Codes-1/prodhon_dataset"
 
 # Iterate through files in the directory
 existing_excel_file="/Users/waquarkaleem/NEOS-LRP-Codes-1/results/neos_results.xlsx" 
