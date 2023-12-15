@@ -21,5 +21,7 @@ PS: Please change all the paths to complete file paths for the successful execut
 
 6) results: This folder contains 2 result excel files.
   PS: Please clear the existing data present in the file to generate your set of results for the data.
+
   > For neos_results, the data columns are: File name, FLP cost, NN predicted VRP cost, NN predicted LRP cost, avg lrp_easy script execution time per depot, initial solution generation time, NN model execution time, VRPeasy computed VRP cost, actual LRP cost(using VRPeasy), avg solver_cvrp script execution time per depot, total solver_cvrp script execution time, VRPeasy model solve time.
+
   > For flp_results, the data columns are: File name, OR-Tools FLP cost, OR-Tools predicted VRP cost, OR-Tools predicted LRP cost, FLP model solve time, OR-Tools execution total time, OR-Tools avg execution time per depot, VRP cost (VRPeasy), LRP cost (VRPeasy), total solver_cvrp script execution time, avg solver_cvrp script execution time."
