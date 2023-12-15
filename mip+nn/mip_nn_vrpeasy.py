@@ -9,16 +9,16 @@ import logging
 import sys
 
 
-name_pattern = os.environ.get('name_pattern')
+# name_pattern = os.environ.get('name_pattern')
 log_dir = "log_files/mip_nn"
 os.makedirs(log_dir, exist_ok=True)
 # Directory containing the files
-directory_path = "/storage/group/azs7266/default/paper_repos/NEOS-LRP-Codes/data"
+directory_path = "/Users/waquarkaleem/NEOS-LRP-Codes-1/data"
 
 
 
 # Iterate through files in the directory
-existing_excel_file="/storage/group/azs7266/default/paper_repos/NEOS-LRP-Codes/results/neos_results.xlsx" 
+existing_excel_file="/Users/waquarkaleem/NEOS-LRP-Codes-1/results/neos_results.xlsx" 
 workbook = openpyxl.load_workbook(existing_excel_file)
 
 # Select the worksheet where you want to append the new row

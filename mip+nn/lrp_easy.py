@@ -34,8 +34,8 @@ class createLRP ():
         
     def dataprocess(self,data_input_file):
         #input data file location
-        phi_loc='/storage/group/azs7266/default/paper_repos/NEOS-LRP-Codes/onnx_files/model_phi_modifed_loss_no_route_abs.onnx'
-        rho_loc='/storage/group/azs7266/default/paper_repos/NEOS-LRP-Codes/onnx_files/model_rho_modifed_loss_no_route_abs.onnx'
+        phi_loc='/Users/waquarkaleem/NEOS-LRP-Codes-1/onnx_files/model_phi_modifed_loss_no_route_abs.onnx'
+        rho_loc='/Users/waquarkaleem/NEOS-LRP-Codes-1/onnx_files/model_rho_modifed_loss_no_route_abs.onnx'
         logging.info(f"The phi file name:{phi_loc}\n")
         logging.info(f"The rho file name:{rho_loc}\n")
         # #preparing for log file
