@@ -33,6 +33,14 @@ Contains two Excel files with results. Users should clear existing data to gener
    - `flp_results`: Presents data related to OR-Tools performance, including costs, solve times, and execution metrics. The data columns are: File name, OR-Tools FLP cost, OR-Tools predicted VRP cost, OR-Tools predicted LRP cost, FLP model solve time, OR-Tools execution total time, OR-Tools avg execution time per depot, VRP cost (VRPeasy), LRP cost (VRPeasy), total solver_cvrp script execution time, avg solver_cvrp script execution time."
 
 
+### Gurobi Installation and Licensing for NEOS-LRP
+
+Before discussinf steps to run the code ensure you have Gurobi with a valid license:
+
+1. **Verify Gurobi Installation:** Check if Gurobi is installed on your machine.
+
+2. **Get a Gurobi License:** If needed get a license. Academic users can get a free license at [Gurobi's Academic License page](https://www.gurobi.com/features/academic-named-user-license/). 
+
 ### Step-by-Step Usage Instructions for NEOS-LRP
 
 To effectively utilize the NEOS-LRP tool, follow these detailed steps:
