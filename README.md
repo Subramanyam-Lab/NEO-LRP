@@ -1,4 +1,4 @@
-# NEOS-LRP: Neural Embedded Optimization Solution for Location and Routing Problems
+#  Neural Embedded Optimization for Integrated Location and Routing Problems 
 
 ## Overview
 Implementation code of Neural Embedded Optimization for Integrated Location and Routing Problems research paper. 
