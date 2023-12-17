@@ -41,9 +41,7 @@ Before discussinf steps to run the code ensure you have Gurobi with a valid lice
 
 2. **Get a Gurobi License:** If needed get a license. Academic users can get a free license at [Gurobi's Academic License page](https://www.gurobi.com/features/academic-named-user-license/). 
 
-### Step-by-Step Usage Instructions for NEOS-LRP
-
-To effectively utilize the NEOS-LRP tool, follow these detailed steps:
+### Step-by-Step Instructions for NEOS-LRP
 
 1. **Clone the Repository:**
    - Clone the NEOS-LRP repository to your local machine.
