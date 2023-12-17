@@ -1,7 +1,7 @@
-#  Neural Embedded Optimization for Integrated Location and Routing Problems 
+#  Neural Embedded Optimization for Integrated Location and Routing Problem
 
 ## Overview
-Implementation code of Neural Embedded Optimization for Integrated Location and Routing Problems research paper. 
+Implementation code of Neural Embedded Optimization for Integrated Location and Routing Problem research paper. 
  
 
 The repository is structured as follows: 
