@@ -35,7 +35,7 @@ Contains two Excel files with results. Users should clear existing data to gener
 
 ### Gurobi Installation and Licensing for NEOS-LRP
 
-Before discussinf steps to run the code ensure you have Gurobi with a valid license:
+Before discussing steps to run the code ensure you have Gurobi with a valid license:
 
 1. **Verify Gurobi Installation:** Check if Gurobi is installed on your machine.
 
