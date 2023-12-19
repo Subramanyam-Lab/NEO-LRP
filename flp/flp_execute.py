@@ -12,13 +12,12 @@ import sys
 #name_pattern = os.environ.get('name_pattern')
 log_dir = "log_files/ortools"
 os.makedirs(log_dir, exist_ok=True)
-# Directory containing the files
-directory_path = "/storage/group/azs7266/default/paper_repos/NEOS-LRP-Codes/data"
 
-
+# Directory containing the prodhon dataset
+directory_path = "/Users/waquarkaleem/NEOS-LRP-Codes/prodhon_dataset"
 
 # Iterate through files in the directory
-existing_excel_file="/storage/group/azs7266/default/paper_repos/NEOS-LRP-Codes/results/ortools_results.xlsx"
+existing_excel_file="/Users/waquarkaleem/NEOS-LRP-Codes/results/flp_results.xlsx"
 workbook = openpyxl.load_workbook(existing_excel_file)
 
 # Select the worksheet where you want to append the new row
@@ -70,7 +69,7 @@ for filename in os.listdir(directory_path):
         logging.shutdown()
 
         # Create a new row
-        new_row = [file_path, flp_results[0], or_vrp_results[0],or_vrp_results[1],flp_results[5],tot_or_exec,or_exec,vrp_easy_results[1], vrp_easy_results[0],tot_ve_exec,ve_exec]  # Replace with your data
+        new_row = [os.path.basename(file_path), flp_results[0], or_vrp_results[0],or_vrp_results[1],flp_results[5],tot_or_exec,or_exec,vrp_easy_results[1], vrp_easy_results[0],tot_ve_exec,ve_exec]  # Replace with your data
         
         # Append the new row to the worksheet
         worksheet.append(new_row)

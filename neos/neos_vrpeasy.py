@@ -13,10 +13,10 @@ import sys
 log_dir = "log_files/mip_nn"
 os.makedirs(log_dir, exist_ok=True)
 # Directory containing the files
-directory_path = "/Users/waquarkaleem/NEOS-LRP-Codes-1/prodhon_dataset"
+directory_path = "/Users/waquarkaleem/NEOS-LRP-Codes/prodhon_dataset"
 
-# Iterate through files in the directory
-existing_excel_file="/Users/waquarkaleem/NEOS-LRP-Codes-1/results/neos_results.xlsx" 
+# Write the results in the excel
+existing_excel_file="/Users/waquarkaleem/NEOS-LRP-Codes/results/neos_results.xlsx" 
 workbook = openpyxl.load_workbook(existing_excel_file)
 
 # Select the worksheet where you want to append the new row
