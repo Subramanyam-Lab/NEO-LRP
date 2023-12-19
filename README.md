@@ -1,9 +1,5 @@
 #  Codes and datasets for the paper Neural Embedded Optimization for Integrated Location and Routing Problems
 
-## Overview
-Implementation code of Neural Embedded Optimization for Integrated Location and Routing Problem research paper. 
- 
-
 The repository is structured as follows: 
 
 ### 1) `prodhon_dataset` 
