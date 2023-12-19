@@ -94,7 +94,7 @@ for filename in os.listdir(directory_path):
         logging.shutdown()
 
         # Create a new row
-        new_row = [file_path,lrp_result[2],lrp_result[3],lrp_result[2]+lrp_result[3],lrp_exec,warmstart_time,nn_model_time,vrp_easy_results[1], vrp_easy_results[0],ve_exec,tot_ve_exec,vrp_easy_results[7]]  # Replace with your data
+        new_row = [os.path.basename(file_path),lrp_result[2],lrp_result[3],lrp_result[2]+lrp_result[3],lrp_exec,warmstart_time,nn_model_time,vrp_easy_results[1], vrp_easy_results[0],ve_exec,tot_ve_exec,vrp_easy_results[7]]  # Replace with your data
         
         # Append the new row to the worksheet
         worksheet.append(new_row)
