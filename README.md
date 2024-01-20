@@ -66,8 +66,8 @@ Before discussing steps to run the code ensure you have Gurobi with a valid lice
    - In the `neos_vrpeasy.py` script:
      - Update the `directory_path` variable to point to the path of the `prodhon_dataset` folder for example: `NEOS-LRP-Codes/prodhon_dataset`. Use the absolute path.
 
-   - Update the `existing_excel_file` variable to point to the path of the `neos_results.xlxs` file to write the results, for example: `results/neos_results.xlsx`. Use the absolute path.
-   
+      - Update the `existing_excel_file` variable to point to the path of the `neos_results.xlxs` file to write the results, for example: `results/neos_results.xlsx`. Use the absolute path.
+      
    - In the `lrp_easy` script, change the paths for `phi_loc` and `rho_loc` to specify the absolute paths to `model_phi_new.onnx` and `model_rho_new.onnx`. For example:
        ```
        phi_loc='/Users/yourusername/NEOS-LRP-Codes/pre_trained_model/model_phi_new.onnx'
