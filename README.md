@@ -23,12 +23,6 @@ Similar to `neos`, this folder contains scripts for parsing data and executing t
    - `flp.py` : returns the customer assignments to open facilities
    -  `vrp.py`: gives the routing decisions for the above set of assignments and also the costs associated. The same customer assignments are passed through solver_cvrp; this returns the routing costs and decisions using VRPSolverEasy. We have used OR-Tools for solving the FLP model and VRP model; any other solver can also be used.
 
-### 5) `results` 
-Contains two Excel files with results. Users should clear existing data to generate new results. The files include:
-   - `neos_results`: Contains columns for various cost metrics, execution times, and model performance data. The data columns are: File name, FLP cost, NN predicted VRP cost, NN predicted LRP cost, avg lrp_easy script execution time per depot, initial solution generation time, NN model execution time, VRPSolverEasy computed VRP cost, actual LRP cost(using VRPSolverEasy), avg solver_cvrp script execution time per depot, total solver_cvrp script execution time, VRPSolverEasy model solve time.
-   - `flp_results`: Presents data related to OR-Tools performance, including costs, solve times, and execution metrics. The data columns are: File name, OR-Tools FLP cost, OR-Tools predicted VRP cost, OR-Tools predicted LRP cost, FLP model solve time, OR-Tools execution total time, OR-Tools avg execution time per depot, VRP cost (VRPSolverEasy), LRP cost (VRPSolverEasy), total solver_cvrp script execution time, avg solver_cvrp script execution time."
-
-
 ### Gurobi Installation and Licensing for NEOS-LRP
 
 Before discussing steps to run the code ensure you have Gurobi with a valid license:
@@ -65,24 +59,33 @@ Before discussing steps to run the code ensure you have Gurobi with a valid lice
      ```
 
 6. **Update Script Paths:**
+
+   - First create a new folder to store the results call it `results`:
+      -Create two `.xlsx` files for example call them  `neos_results.xlsx` and  `flp_results.xlsx`
+   
    - In the `neos_vrpeasy.py` script:
      - Update the `directory_path` variable to point to the path of the `prodhon_dataset` folder, for example: `NEOS-LRP-Codes/prodhon_dataset`. Use the absolute path.
-     - Update the `existing_excel_file` variable to point to the path of the `neos_results.xlxs` file to write the results, for example: `results/neos_results.xlsx`. Use the absolute path.
-     - In the `lrp_easy` script, change the paths for `phi_loc` and `rho_loc` to specify the absolute paths to `model_phi_new.onnx` and `model_rho_new.onnx`. For example:
+
+   - Update the `existing_excel_file` variable to point to the path of the `neos_results.xlxs` file to write the results, for example: `results/neos_results.xlsx`. Use the absolute path.
+   
+   - In the `lrp_easy` script, change the paths for `phi_loc` and `rho_loc` to specify the absolute paths to `model_phi_new.onnx` and `model_rho_new.onnx`. For example:
        ```
        phi_loc='/Users/yourusername/NEOS-LRP-Codes/pre_trained_model/model_phi_new.onnx'
        rho_loc='/Users/yourusername/NEOS-LRP-Codes/pre_trained_model/model_rho_new.onnx'
        ```
-
-7. **Prepare Result Files:**
-   - Go to the `results` folder.
-   - Open `neos_results.xlsx` and `flp_results.xlsx`.
-   - Clear existing data while keeping the column headers.
 
 8. **Run the `neos_vrpeasy.py` Script:**
    - Execute the `neos_vrpeasy.py` script located in `NEOS-LRP-Codes/neos`. This runs the neural embedded frameworks, and the results will be stored in `results/neos_results.xlsx`.
 
 9. **Run the `flp_execute` Script:**
    - Before running `flp_execute`, ensure that you update the `directory_path` variable in the script, similar to the step mentioned in point 6.
+
+
+5. **Check the `results` folder:**
+
+After successful running the code you can see the two Excel files with results. The files include:
+   - `neos_results`: Contains columns for various cost metrics, execution times, and model performance data. The data columns are: File name, FLP cost, NN predicted VRP cost, NN predicted LRP cost, avg lrp_easy script execution time per depot, initial solution generation time, NN model execution time, VRPSolverEasy computed VRP cost, actual LRP cost(using VRPSolverEasy), avg solver_cvrp script execution time per depot, total solver_cvrp script execution time, VRPSolverEasy model solve time.
+   - `flp_results`: Presents data related to OR-Tools performance, including costs, solve times, and execution metrics. The data columns are: File name, OR-Tools FLP cost, OR-Tools predicted VRP cost, OR-Tools predicted LRP cost, FLP model solve time, OR-Tools execution total time, OR-Tools avg execution time per depot, VRP cost (VRPSolverEasy), LRP cost (VRPSolverEasy), total solver_cvrp script execution time, avg solver_cvrp script execution time."
+
 
 By following these steps, you should be able to successfully set up and run NEOS-LRP on your machine.
