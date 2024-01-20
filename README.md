@@ -61,10 +61,10 @@ Before discussing steps to run the code ensure you have Gurobi with a valid lice
 6. **Update Script Paths:**
 
    - First create a new folder to store the results call it `results`:
-      -Create two `.xlsx` files for example call them  `neos_results.xlsx` and  `flp_results.xlsx`
+      - Create two `.xlsx` files for example call them  `neos_results.xlsx` and  `flp_results.xlsx`
    
    - In the `neos_vrpeasy.py` script:
-     - Update the `directory_path` variable to point to the path of the `prodhon_dataset` folder, for example: `NEOS-LRP-Codes/prodhon_dataset`. Use the absolute path.
+     - Update the `directory_path` variable to point to the path of the `prodhon_dataset` folder for example: `NEOS-LRP-Codes/prodhon_dataset`. Use the absolute path.
 
    - Update the `existing_excel_file` variable to point to the path of the `neos_results.xlxs` file to write the results, for example: `results/neos_results.xlsx`. Use the absolute path.
    
@@ -73,7 +73,7 @@ Before discussing steps to run the code ensure you have Gurobi with a valid lice
        phi_loc='/Users/yourusername/NEOS-LRP-Codes/pre_trained_model/model_phi_new.onnx'
        rho_loc='/Users/yourusername/NEOS-LRP-Codes/pre_trained_model/model_rho_new.onnx'
        ```
-
+ 
 7. **Run the `neos_vrpeasy.py` Script:**
    - Execute the `neos_vrpeasy.py` script located in `NEOS-LRP-Codes/neos`. This runs the neural embedded frameworks, and the results will be stored in `results/neos_results.xlsx`.
 
