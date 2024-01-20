@@ -74,14 +74,14 @@ Before discussing steps to run the code ensure you have Gurobi with a valid lice
        rho_loc='/Users/yourusername/NEOS-LRP-Codes/pre_trained_model/model_rho_new.onnx'
        ```
 
-8. **Run the `neos_vrpeasy.py` Script:**
+7. **Run the `neos_vrpeasy.py` Script:**
    - Execute the `neos_vrpeasy.py` script located in `NEOS-LRP-Codes/neos`. This runs the neural embedded frameworks, and the results will be stored in `results/neos_results.xlsx`.
 
-9. **Run the `flp_execute` Script:**
+8. **Run the `flp_execute` Script:**
    - Before running `flp_execute`, ensure that you update the `directory_path` variable in the script, similar to the step mentioned in point 6.
 
 
-5. **Check the `results` folder:**
+9. **Check the `results` folder:**
 
 After successful running the code you can see the two Excel files with results. The files include:
    - `neos_results`: Contains columns for various cost metrics, execution times, and model performance data. The data columns are: File name, FLP cost, NN predicted VRP cost, NN predicted LRP cost, avg lrp_easy script execution time per depot, initial solution generation time, NN model execution time, VRPSolverEasy computed VRP cost, actual LRP cost(using VRPSolverEasy), avg solver_cvrp script execution time per depot, total solver_cvrp script execution time, VRPSolverEasy model solve time.
