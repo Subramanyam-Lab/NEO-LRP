@@ -1,5 +1,4 @@
-#  Codes and datasets for the paper Neural Embedded Mixed-Integer Optimization for
-Location-Routing Problems
+#  Codes and datasets for the paper Neural Embedded Mixed-Integer Optimization for Location-Routing Problems
 
 The repository is structured as follows: 
 
