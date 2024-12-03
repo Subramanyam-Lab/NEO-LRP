@@ -29,8 +29,7 @@ Core implementation of the neural embedded framework:
 
 ### 3. `pre_trained_model/`
 Pre-trained neural networks (ONNX format) for routing cost prediction:
-- Includes models for GVS, PSCC, and RSCC sampling methods
-- Contains both ρ-hat (rho) and φ-hat (phi) networks
+- Includes pre-trained $\hat{\phi}$ and $\hat{\rho}$ models for GVS, PSCC, and RSCC sampling methods
 
 ### 4. `flp/`
 FLP model implementation:
