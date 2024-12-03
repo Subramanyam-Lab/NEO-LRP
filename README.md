@@ -1,6 +1,6 @@
 # Neural Embedded Mixed-Integer Optimization for Location-Routing Problems
 
-This repository contains the implementation and datasets for the Neural Embedded Mixed-Integer Optimization approach to solving Location-Routing Problems (LRP).
+This repository contains the implementation and datasets for the Neural Embedded Mixed-Integer Optimization approach to solving Location-Routing Problems.
 
 ## Table of Contents
 - [Overview](#overview)
@@ -24,7 +24,7 @@ Core implementation of the neural embedded framework:
 - `flp_org/`: Initial MIP model solution generators
 - `dataparse/`: Dataset conversion utilities
 - `network/`: Neural network transformation tools (ONNX to PyTorch)
-- `neural_embedded_model/`: Main LRP implementation using Gurobi
+- `neural_embedded_model/`: Main neural-embedded implemention
 - `solver_cvrp/`: VRPSolverEasy integration for exact route cost calculation
 
 ### 3. `pre_trained_model/`
