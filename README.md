@@ -1,91 +1,119 @@
-#  Codes and datasets for the paper Neural Embedded Mixed-Integer Optimization for Location-Routing Problems
+# Neural Embedded Mixed-Integer Optimization for Location-Routing Problems
 
-The repository is structured as follows: 
+This repository contains the implementation and datasets for the Neural Embedded Mixed-Integer Optimization approach to solving Location-Routing Problems (LRP).
 
-### 1) `prodhon_dataset` 
-This folder contains the dataset used in our numerical experiments.
+## Table of Contents
+- [Overview](#overview)
+- [Repository Structure](#repository-structure)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Results](#results)
+- [Citation](#citation)
 
-### 2) `neos` 
-Contains scripts for computing LRP costs using neural embedded framework, with results stored in `neos_results.xlsx` under the `results` folder. Key scripts include:
-   - `flp_org`: Generates initial solutions for the MIP model.
-   - `dataparse`: Converts `.dat` files (prodhon dataset) into a usable format
-   - `network`: Transforms pretrained neural network (in ONNX file format) into PyTorch models, invoking `lrp_easy.py` and `solver_cvrp.py`.
-   - `lrp_easy`: The lrp_easy.py contains the LRP (Location Routing Problem) model developed using the Gurobi interface. It includes the trained neural network component for predicting the routing cost, which guides the customer assignment decisions. The customer assignments generated are then passed through solver_cvrp.py.This file has all necessary libraries for executing the scripts. Users should install these libraries, step by step how to run the code is describe in subsequent sections.
-   - `solver_cvrp`: calls VRPSolverEasy (exact branch price and cut VRP solver) for exact route cost calculation based on customer assignments.
+## Overview
 
-### 3) `pre_trained_model` 
-Stores the pretrained neural network in ONNX format for route cost and number of routes prediction.
+This project implements a neural embedded framework for solving Location-Routing Problems, combining traditional optimization techniques with neural networks for improved solution quality and computational efficiency.
 
-### 4) `flp` 
-Similar to `neos`, this folder contains scripts for parsing data and executing the FLP model. Key files include:
-   - `dataparser`: Parses `.dat` files into a usable format
-   - `flp_execute`: Main file calling `flp.py`, `vrp.py`, and `solver_cvrp`.
-   - `flp.py` : returns the customer assignments to open facilities
-   -  `vrp.py`: gives the routing decisions for the above set of assignments and also the costs associated. The same customer assignments are passed through solver_cvrp; this returns the routing costs and decisions using VRPSolverEasy. We have used OR-Tools for solving the FLP model and VRP model; any other solver can also be used.
+## Repository Structure
 
-### Gurobi Installation and Licensing for NEOS-LRP
+### 1. `prodhon_dataset/`
+Contains benchmark datasets used in numerical experiments.
 
-Before discussing steps to run the code ensure you have Gurobi with a valid license:
+### 2. `neo-lrp/`
+Core implementation of the neural embedded framework:
+- `flp_org/`: Initial MIP model solution generators
+- `dataparse/`: Dataset conversion utilities
+- `network/`: Neural network transformation tools (ONNX to PyTorch)
+- `neural_embedded_model/`: Main LRP implementation using Gurobi
+- `solver_cvrp/`: VRPSolverEasy integration for exact route cost calculation
 
-1. **Verify Gurobi Installation:** Check if Gurobi is installed on your machine.
+### 3. `pre_trained_model/`
+Pre-trained neural networks (ONNX format) for routing cost prediction:
+- Includes models for GVS, PSCC, and RSCC sampling methods
+- Contains both ρ-hat (rho) and φ-hat (phi) networks
 
-2. **Get a Gurobi License:** If needed get a license. Academic users can get a free license at [Gurobi's Academic License page](https://www.gurobi.com/features/academic-named-user-license/). 
+### 4. `flp/`
+FLP model implementation:
+- `dataparser/`: Data format conversion tools
+- `flp_execute/`: Main execution script
+- `flp.py`: Facility assignment logic
+- `vrp.py`: Vehicle routing implementation
+- `solver_cvrp/`: Exact routing solver integration
 
-### Step-by-Step Instructions for NEOS-LRP
+## Installation
 
-1. **Clone the Repository:**
-   - Clone the NEOS-LRP repository to your local machine.
+1. **Clone the Repository**
+```bash
+git clone https://github.com/yourusername/neo-lrp.git
+cd neo-lrp
+```
 
-2. **Navigate to the Repository Folder:**
-   - Open your terminal or command prompt.
-   - Change the current working directory to the cloned NEOS-LRP repository by running: `cd NEOS-LRP-Codes`.
+2. **Create and Activate Conda Environment**
+```bash
+conda create --name neos_lrp python=3.9
+conda activate neos_lrp
+```
 
-3. **Create a New Conda Environment:**
-   - In your terminal, create a new Conda environment named `neos_lrp` with Python version 3.9 using the command:
-     ```
-     conda create --name neos_lrp python=3.9
-     ```
+3. **Install Dependencies**
+```bash
+pip install -r requirements.txt
+```
 
-4. **Activate the Environment:**
-   - Activate the newly created Conda environment by running:
-     ```
-     conda activate neos_lrp
-     ```
+## Usage
 
-5. **Install Required Libraries:**
-   - Install the necessary libraries listed in the `requirements.txt` file by executing:
-     ```
-     pip install -r requirements.txt
-     ```
+To run the neural embedded framework:
 
-6. **Update Script Paths:**
+```bash
+python neo_lrp_execute.py \
+    --BFS /path/to/solutions \
+    --phi_loc /path/to/phi_model.onnx \
+    --rho_loc /path/to/rho_model.onnx \
+    --existing_excel_file results.xlsx \
+    --sheet_name "Results" \
+    --normalization dynamic
+```
 
-   - First create a new folder to store the results call it `results`:
-      - Create two `.xlsx` files for example call them  `neos_results.xlsx` and  `flp_results.xlsx`
-   
-   - In the `neos_vrpeasy.py` script:
-     - Update the `directory_path` variable to point to the path of the `prodhon_dataset` folder for example: `NEOS-LRP-Codes/prodhon_dataset`. Use the absolute path.
+### Command Line Arguments
 
-      - Update the `existing_excel_file` variable to point to the path of the `neos_results.xlxs` file to write the results, for example: `results/neos_results.xlsx`. Use the absolute path.
-      
-   - In the `lrp_easy` script, change the paths for `phi_loc` and `rho_loc` to specify the absolute paths to `model_phi_new.onnx` and `model_rho_new.onnx`. For example:
-       ```
-       phi_loc='/Users/yourusername/NEOS-LRP-Codes/pre_trained_model/model_phi_new.onnx'
-       rho_loc='/Users/yourusername/NEOS-LRP-Codes/pre_trained_model/model_rho_new.onnx'
-       ```
- 
-7. **Run the `neos_vrpeasy.py` Script:**
-   - Execute the `neos_vrpeasy.py` script located in `NEOS-LRP-Codes/neos`. This runs the neural embedded frameworks, and the results will be stored in `results/neos_results.xlsx`.
+- `--BFS`: Directory path for storing integer feasible solutions (will not be used)
+- `--phi_loc`: Path to the phi (φ) model file (ONNX format)
+- `--rho_loc`: Path to the rho (ρ) model file (ONNX format)
+- `--existing_excel_file`: Path to the Excel file for storing results
+- `--sheet_name`: Name of the worksheet in the Excel file
+- `--normalization`: Normalization strategy (`fixed` for GVS or `dynamic` for RSCC and PSCC)
 
-8. **Run the `flp_execute` Script:**
-   - Before running `flp_execute`, ensure that you update the `directory_path` variable in the script, similar to the step mentioned in point 6.
+## Results
 
+The framework generates two Excel files in the `results/` directory:
 
-9. **Check the `results` folder:**
+### 1. `neo_lrp_results.xlsx`
+Contains comprehensive solution metrics including:
+- Instance details and solution costs (FLP, VRP, LRP)
+- Number of routes in optimal solution
+- Execution times (MIP+NN, initial solution, NN model)
+- VRPSolverEasy computed costs and times
+- Best known solutions (BKS)
+- Optimization and prediction gaps
 
-After successful running the code you can see the two Excel files with results. The files include:
-   - `neos_results`: Contains columns for various cost metrics, execution times, and model performance data. The data columns are: File name, FLP cost, NN predicted VRP cost, NN predicted LRP cost, avg lrp_easy script execution time per depot, initial solution generation time, NN model execution time, VRPSolverEasy computed VRP cost, actual LRP cost(using VRPSolverEasy), avg solver_cvrp script execution time per depot, total solver_cvrp script execution time, VRPSolverEasy model solve time.
-   - `flp_results`: Presents data related to OR-Tools performance, including costs, solve times, and execution metrics. The data columns are: File name, OR-Tools FLP cost, OR-Tools predicted VRP cost, OR-Tools predicted LRP cost, FLP model solve time, OR-Tools execution total time, OR-Tools avg execution time per depot, VRP cost (VRPSolverEasy), LRP cost (VRPSolverEasy), total solver_cvrp script execution time, avg solver_cvrp script execution time."
+### 2. `flp.xlsx`
+Contains FLP-specific metrics including:
+- Instance details
+- FLP and VRP costs
+- Execution times for different components
+- OR-Tools and VRPSolverEasy performance metrics
+- Solution quality gaps
 
+## Citation
 
-By following these steps, you should be able to successfully set up and run NEOS-LRP on your machine.
+```bibtex
+@inproceedings{kaleem2024neural,
+  title={Neural Embedded Optimization for Integrated Location and Routing Problems},
+  author={Kaleem, Waquar and Ayala, Harshita and Subramanyam, Anirudh},
+  booktitle={IISE Annual Conference. Proceedings},
+  pages={1--6},
+  year={2024},
+  organization={Institute of Industrial and Systems Engineers (IISE)}
+}
+```
+
+For questions and support, please open an issue in the repository or contact the authors.
