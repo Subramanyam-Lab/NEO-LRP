@@ -43,7 +43,7 @@ FLP model implementation:
 
 1. **Clone the Repository**
 ```bash
-git clone https://github.com/yourusername/neo-lrp.git
+git clone https://github.com/Subramanyam-Lab/NEO-LRP.git
 cd neo-lrp
 ```
 
