@@ -49,8 +49,8 @@ cd neo-lrp
 
 2. **Create and Activate Conda Environment**
 ```bash
-conda create --name neos_lrp python=3.9
-conda activate neos_lrp
+conda create --name neo_lrp python=3.9
+conda activate neo_lrp
 ```
 
 3. **Install Dependencies**
