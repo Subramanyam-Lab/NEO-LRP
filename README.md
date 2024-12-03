@@ -103,7 +103,7 @@ Contains FLP-specific metrics including:
 - Solution quality gaps
 
 ## Citation
-
+If you happen to use our pre-trained models or codes please cite the following papers: 
 ```bibtex
 @inproceedings{kaleem2024neural,
   title={Neural Embedded Optimization for Integrated Location and Routing Problems},
