@@ -113,6 +113,13 @@ If you happen to use our pre-trained models or codes please cite the following p
   year={2024},
   organization={Institute of Industrial and Systems Engineers (IISE)}
 }
+@article{kaleem2024neural,
+  title={Neural Embedded Mixed-Integer Optimization for Location-Routing Problems},
+  author={Kaleem, Waquar and Subramanyam, Anirudh},
+  journal={arXiv preprint arXiv:2412.05665},
+  year={2024}
+}
 ```
+
 
 For questions and support, please open an issue in the repository or contact the authors.
