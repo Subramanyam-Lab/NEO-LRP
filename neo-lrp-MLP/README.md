@@ -15,13 +15,50 @@ This directory contains the Multi-Layer Perceptron (MLP) implementation of the n
 
 ## Usage
 
+### Prerequisites
+
+#### BaPCod Library Installation (Required for VRPSolverEasy)
+
+The MLP implementation uses VRPSolverEasy which requires the BaPCod library for exact VRP solutions.
+
+**For Intel Macs:**
+```bash
+# Download BaPCod from: https://bapcod.math.u-bordeaux.fr
+# Extract and copy the library to VRPSolverEasy
+cp /path/to/bapcod/libbapcod-shared.dylib ./venv/lib/python3.11/site-packages/VRPSolverEasy/lib/Darwin/
+```
+
+**For Apple Silicon Macs (M1/M2/M3):**
+```bash
+# Install Rosetta 2
+softwareupdate --install-rosetta --agree-to-license
+
+# Create x86_64 virtual environment
+arch -x86_64 /usr/bin/python3 -m venv venv_x86
+arch -x86_64 ./venv_x86/bin/pip install -r requirements.txt
+
+# Copy BaPCod library and remove quarantine
+cp /path/to/bapcod/libbapcod-shared.dylib ./venv_x86/lib/python3.9/site-packages/VRPSolverEasy/lib/Darwin/
+xattr -d com.apple.quarantine ./venv_x86/lib/python3.9/site-packages/VRPSolverEasy/lib/Darwin/libbapcod-shared.dylib
+
+# Run with x86_64 Python
+arch -x86_64 ./venv_x86/bin/python neo_lrp_execute.py
+```
+
 ### Running with Pre-trained Models
 
 To run the neural embedded framework using pre-trained MLP networks:
 
+**Intel Macs:**
 ```bash
 cd neo-lrp-MLP
 python neo_lrp_execute.py
+```
+
+**Apple Silicon Macs:**
+```bash
+cd neo-lrp-MLP
+arch -x86_64 ../venv_x86/bin/python neo_lrp_execute.py
 ```
 
 The script will automatically:

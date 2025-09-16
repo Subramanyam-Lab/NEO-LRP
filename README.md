@@ -75,6 +75,38 @@ sudo apt install python3.11 python3.11-venv
 pip install -r requirements.txt
 ```
 
+### Platform-Specific Notes
+
+#### Apple Silicon Macs (M1/M2/M3)
+The MLP implementation requires BaPCod library which is only available for x86_64 architecture. For Apple Silicon Macs:
+
+1. **Install Rosetta 2:**
+   ```bash
+   softwareupdate --install-rosetta --agree-to-license
+   ```
+
+2. **Create x86_64 virtual environment:**
+   ```bash
+   arch -x86_64 /usr/bin/python3 -m venv venv_x86
+   arch -x86_64 ./venv_x86/bin/pip install -r requirements.txt
+   ```
+
+3. **Download and install BaPCod:**
+   - Request BaPCod library from [bapcod.math.u-bordeaux.fr](https://bapcod.math.u-bordeaux.fr)
+   - Copy the library and remove quarantine:
+   ```bash
+   cp /path/to/bapcod/libbapcod-shared.dylib ./venv_x86/lib/python3.9/site-packages/VRPSolverEasy/lib/Darwin/
+   xattr -d com.apple.quarantine ./venv_x86/lib/python3.9/site-packages/VRPSolverEasy/lib/Darwin/libbapcod-shared.dylib
+   ```
+
+4. **Run MLP implementation:**
+   ```bash
+   cd neo-lrp-MLP
+   arch -x86_64 ../venv_x86/bin/python neo_lrp_execute.py
+   ```
+
+**Note:** The GT implementation works natively on Apple Silicon as it uses VROOM solver.
+
 ## Usage
 
 This repository provides two implementations of the neural embedded framework:

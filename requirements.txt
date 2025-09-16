@@ -20,10 +20,13 @@ h5py>=3.0.0
 # Optimization libraries
 gurobipy>=10.0.0
 ortools>=9.0.0
-VRPSolverEasy>=0.1.0  # VRP solver (requires BaPCod library)
+VRPSolverEasy>=0.1.0  # VRP solver (requires BaPCod library - see README for installation)
 
-# VRP solver
+# VRP solvers
 pyvroom>=1.14.0  # Alternative VRP solver (used in GT implementation)
+# Note: BaPCod library required for VRPSolverEasy
+# - Intel Macs: Download from https://bapcod.math.u-bordeaux.fr
+# - Apple Silicon Macs: Use x86_64 Python with Rosetta 2
 
 # ONNX model support
 onnx>=1.12.0
