@@ -62,7 +62,7 @@ def prepare_pretrain_data(file_path, split_ratios, num_entries=None, device=None
                 continue
 
             # Create Data object with extra attribute 'mask'
-            data = Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=label, mask=mask)
+            data = Data(x=x, y=label, mask=mask)
             data_list.append(data)
 
     total_size = len(data_list)
