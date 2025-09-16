@@ -116,7 +116,7 @@ The script will automatically:
 
 ### Configuration
 
-#### Graph Transformer Implementation (`neo-lrp/`)
+#### Graph Transformer Implementation (`neo-lrp-GT/`)
 The main parameters can be modified in `neo_lrp_execute_vroom.py`:
 
 ```python
