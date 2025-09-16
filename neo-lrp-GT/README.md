@@ -14,7 +14,9 @@ This directory contains the Graph Transformer implementation of the neural embed
 
 ## Usage
 
-To run the neural embedded framework using Graph Transformer:
+### Running with Pre-trained Models
+
+To run the neural embedded framework using pre-trained Graph Transformer:
 
 ```bash
 cd neo-lrp-GT
@@ -25,6 +27,61 @@ The script will automatically:
 - Use the pre-trained Graph Transformer model from `../pre_trained_models/graph_transformer.pth`
 - Process all instances in `../prodhon_dataset/`
 - Generate results in `results/neo_lrp_gt_results.xlsx`
+
+### Training from Scratch with New Dataset
+
+To train a new Graph Transformer model with your own dataset, follow these steps:
+
+#### 1. Data Generation
+
+First, generate training data using the VROOM solver:
+
+```bash
+cd ../training_data_sampling
+python data_generation.py --target_num_data 128000 --seed 0
+```
+
+This will create training data in HDF5 format. See `data_generation.py` for available parameters.
+
+#### 2. Hyperparameter Tuning
+
+Use the pre-training script to find optimal hyperparameters:
+
+```bash
+cd ../neo-lrp-GT
+python pre_train.py
+```
+
+This script uses Weights & Biases (wandb) to perform Bayesian optimization over various hyperparameters including network architecture, learning rate, and training settings.
+
+**Note:** Make sure to update the data path in `pre_train.py` to point to your generated training data.
+
+#### 3. Model Training
+
+Once you have optimal hyperparameters, train the final model:
+
+```bash
+python train.py
+```
+
+**Configuration:**
+- Update the data path in `train.py` to use your training data
+- Modify hyperparameters based on results from step 2
+- The script will save the best model to the `model_state/` directory
+
+#### 4. Using Your Trained Model
+
+After training, update the model path in `neo_lrp_execute_vroom.py`:
+
+```python
+phi_loc = "path/to/your/trained_model.pth"  # Update this path
+```
+
+Then run the execution script:
+
+```bash
+python neo_lrp_execute_vroom.py
+```
 
 ## Configuration
 

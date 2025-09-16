@@ -15,7 +15,9 @@ This directory contains the Multi-Layer Perceptron (MLP) implementation of the n
 
 ## Usage
 
-To run the neural embedded framework using Multi-Layer Perceptron networks:
+### Running with Pre-trained Models
+
+To run the neural embedded framework using pre-trained MLP networks:
 
 ```bash
 cd neo-lrp-MLP
@@ -23,9 +25,65 @@ python neo_lrp_execute.py
 ```
 
 The script will automatically:
-- Use pre-trained ONNX models from `../pre_trained_models/` (GVS, PSCC, RSCC)
+- Use pre-trained ONNX models from `../pre_trained_models/`
 - Process all instances in `../prodhon_dataset/`
 - Generate results in `results/neo_lrp_mlp_results.xlsx`
+
+### Training from Scratch with New Dataset
+
+To train new MLP models (PhiNet and RhoNet) with your own dataset, follow these steps:
+
+#### 1. Data Generation
+
+First, generate training data using the VROOM solver:
+
+```bash
+cd ../training_data_sampling
+python data_generation.py --target_num_data 128000 --seed 0
+```
+
+This will create training data in HDF5 format. See `data_generation.py` for available parameters.
+
+#### 2. Hyperparameter Tuning
+
+Use the pre-training script to find optimal hyperparameters:
+
+```bash
+cd ../neo-lrp-MLP
+python pre_train.py
+```
+
+This script uses Weights & Biases (wandb) to perform Bayesian optimization over various hyperparameters including network architecture, learning rate, and training settings.
+
+**Note:** Make sure to update the data path in `pre_train.py` to point to your generated training data.
+
+#### 3. Model Training
+
+Once you have optimal hyperparameters, train the final models:
+
+```bash
+python train.py
+```
+
+**Configuration:**
+- Update the data path in `train.py` to use your training data
+- Modify hyperparameters based on results from step 2
+- The script will automatically export trained models to ONNX format
+
+#### 4. Using Your Trained Models
+
+After training, update the model paths in `neo_lrp_execute.py`:
+
+```python
+phi_loc = "path/to/your/phi_net.onnx"  # Update this path
+rho_loc = "path/to/your/rho_net.onnx"  # Update this path
+```
+
+Then run the execution script:
+
+```bash
+python neo_lrp_execute.py
+```
 
 ## Configuration
 
@@ -53,13 +111,10 @@ This implementation requires:
 ## Pre-trained Models
 
 The MLP implementation uses ONNX models located in `../pre_trained_models/`:
-- `GVS/`: ONNX models for GVS sampling method
-- `PSCC/`: ONNX models for PSCC sampling method  
-- `RSCC/`: ONNX models for RSCC sampling method
-
-Each sampling method directory contains:
-- `model_phi_*.onnx`: Pre-trained phi models for cost prediction
-- `model_rho_*.onnx`: Pre-trained rho models for cost prediction
+- `feed_forward/`: Main MLP models directory
+  - `phi_net.onnx`: Pre-trained PhiNet model for node embedding
+  - `rho_net.onnx`: Pre-trained RhoNet model for cost prediction
+- `mlp_phi.onnx`, `mlp_rho.onnx`: Alternative MLP models
 
 ## Results
 

@@ -54,6 +54,12 @@ output/
 *.csv
 *.log
 
+# Test execution results
+neo-lrp-GT/results/
+neo-lrp-GT/solutions/
+neo-lrp-MLP/results/
+neo-lrp-MLP/solutions/
+
 # Temporary files
 *.tmp
 *.temp
