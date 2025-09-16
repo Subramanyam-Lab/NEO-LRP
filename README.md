@@ -27,13 +27,9 @@ Multi-Layer Perceptron (MLP) implementation of the neural embedded framework. Se
 
 ### 4. `pre_trained_models/`
 Pre-trained neural networks for routing cost prediction:
-- `graph_transformer/`: Graph Transformer models (for GT implementation)
-  - `neural_network.pth`: Pre-trained Graph Transformer model
-- `feed_forward/`: MLP models (for MLP implementation)
-  - `phi_net.onnx`: Pre-trained phi model for cost prediction
-  - `rho_net.onnx`: Pre-trained rho model for cost prediction
-- `graph_transformer.pth`: Alternative Graph Transformer model
-- `mlp_phi.onnx`, `mlp_rho.onnx`: Alternative MLP models
+- `graph_transformer.pth`: Pre-trained Graph Transformer model (for GT implementation)
+- `mlp_phi.onnx`: Pre-trained phi model for cost prediction (for MLP implementation)
+- `mlp_rho.onnx`: Pre-trained rho model for cost prediction (for MLP implementation)
 
 ### 5. `training_data_sampling/`
 Training data generation utilities:

@@ -148,10 +148,8 @@ This implementation requires:
 ## Pre-trained Models
 
 The MLP implementation uses ONNX models located in `../pre_trained_models/`:
-- `feed_forward/`: Main MLP models directory
-  - `phi_net.onnx`: Pre-trained PhiNet model for node embedding
-  - `rho_net.onnx`: Pre-trained RhoNet model for cost prediction
-- `mlp_phi.onnx`, `mlp_rho.onnx`: Alternative MLP models
+- `mlp_phi.onnx`: Pre-trained PhiNet model for node embedding
+- `mlp_rho.onnx`: Pre-trained RhoNet model for cost prediction
 
 ## Results
 
