@@ -19,28 +19,21 @@ This project implements a neural embedded framework for solving Location-Routing
 ### 1. `prodhon_dataset/`
 Contains benchmark datasets used in numerical experiments.
 
-### 2. `neo-lrp/`
-Core implementation of the neural embedded framework using Graph Transformer:
-- `neo_lrp_execute_vroom.py`: Main execution script using VROOM solver
-- `neural_embedded_model.py`: Neural embedded LRP solver implementation
-- `net.py`: Graph Transformer network architecture
-- `dataparse.py`: Data parsing and normalization utilities
-- `solver_cvrp_vroom.py`: VROOM-based CVRP solver integration
-- `utils.py`, `utils_train.py`: Utility functions for training and processing
+### 2. `neo-lrp-GT/`
+Graph Transformer implementation of the neural embedded framework. See [neo-lrp-GT/README.md](neo-lrp-GT/README.md) for detailed usage instructions.
 
 ### 3. `neo-lrp-MLP/`
-Alternative implementation using Multi-Layer Perceptron (MLP) networks:
-- `neo_lrp_execute.py`: Main execution script for MLP implementation
-- `neural_embedded_model.py`: Neural embedded LRP solver using MLP networks
-- `network.py`: MLP network utilities for ONNX model loading
-- `solver_cvrp.py`: VRPSolverEasy-based CVRP solver integration
+Multi-Layer Perceptron (MLP) implementation of the neural embedded framework. See [neo-lrp-MLP/README.md](neo-lrp-MLP/README.md) for detailed usage instructions.
 
 ### 4. `pre_trained_models/`
 Pre-trained neural networks for routing cost prediction:
-- `graph_transformer.pth`: Pre-trained Graph Transformer model (for GT implementation)
-- `GVS/`, `PSCC/`, `RSCC/`: ONNX models for different sampling methods (for MLP implementation)
-  - `model_phi_*.onnx`: Pre-trained phi models for cost prediction
-  - `model_rho_*.onnx`: Pre-trained rho models for cost prediction
+- `graph_transformer/`: Graph Transformer models (for GT implementation)
+  - `neural_network.pth`: Pre-trained Graph Transformer model
+- `feed_forward/`: MLP models (for MLP implementation)
+  - `phi_net.onnx`: Pre-trained phi model for cost prediction
+  - `rho_net.onnx`: Pre-trained rho model for cost prediction
+- `graph_transformer.pth`: Alternative Graph Transformer model
+- `mlp_phi.onnx`, `mlp_rho.onnx`: Alternative MLP models
 
 ### 5. `training_data_sampling/`
 Training data generation utilities:
@@ -86,62 +79,9 @@ pip install -r requirements.txt
 
 This repository provides two implementations of the neural embedded framework:
 
-### 1. Graph Transformer Implementation (`neo-lrp/`)
+1. **Graph Transformer Implementation** (`neo-lrp-GT/`): Uses Graph Transformer networks for routing cost prediction. See [neo-lrp-GT/README.md](neo-lrp-GT/README.md) for detailed usage instructions.
 
-To run the neural embedded framework using Graph Transformer:
-
-```bash
-cd neo-lrp
-python neo_lrp_execute_vroom.py
-```
-
-The script will automatically:
-- Use the pre-trained Graph Transformer model from `../pre_trained_models/graph_transformer.pth`
-- Process all instances in `../prodhon_dataset/`
-- Generate results in `results/neo_lrp_gt_results.xlsx`
-
-### 2. MLP Implementation (`neo-lrp-MLP/`)
-
-To run the neural embedded framework using Multi-Layer Perceptron networks:
-
-```bash
-cd neo-lrp-MLP
-python neo_lrp_execute.py
-```
-
-The script will automatically:
-- Use pre-trained ONNX models from `../pre_trained_models/` (GVS, PSCC, RSCC)
-- Process all instances in `../prodhon_dataset/`
-- Generate results in `results/neo_lrp_mlp_results.xlsx`
-
-### Configuration
-
-#### Graph Transformer Implementation (`neo-lrp/`)
-The main parameters can be modified in `neo_lrp_execute_vroom.py`:
-
-```python
-# Configuration parameters
-BFS = "solutions"  # Directory for storing intermediate solutions
-phi_loc = "../pre_trained_models/graph_transformer.pth"  # Model path
-existing_excel_file = "results/neo_lrp_gt_results.xlsx"  # Results file
-sheet_name = "results"  # Excel sheet name
-fi_mode_input = "dynamic"  # Normalization mode
-directory_path = "../prodhon_dataset"  # Dataset directory
-```
-
-#### MLP Implementation (`neo-lrp-MLP/`)
-The main parameters can be modified in `neo_lrp_execute.py`:
-
-```python
-# Configuration parameters
-BFS = "solutions"  # Directory for storing intermediate solutions
-phi_loc = "../pre_trained_models/mlp_phi.onnx"  # Phi model path
-rho_loc = "../pre_trained_models/mlp_rho.onnx"  # Rho model path
-existing_excel_file = "results/neo_lrp_mlp_results.xlsx"  # Results file
-sheet_name = "results"  # Excel sheet name
-fi_mode_input = "dynamic"  # Normalization mode
-directory_path = "../prodhon_dataset"  # Dataset directory
-```
+2. **MLP Implementation** (`neo-lrp-MLP/`): Uses Multi-Layer Perceptron networks with ONNX models. See [neo-lrp-MLP/README.md](neo-lrp-MLP/README.md) for detailed usage instructions.
 
 ### Requirements
 
@@ -151,115 +91,12 @@ Make sure to install the required dependencies:
 pip install -r requirements.txt
 ```
 
-**Note**: This implementation requires:
-- PyTorch with CUDA support (recommended)
-- Gurobi optimizer (for MIP solving)
-- VROOM solver (for exact VRP solutions in GT implementation)
-- VRPSolverEasy with BaPCod library (for exact VRP solutions in MLP implementation)
-- PyTorch Geometric (for graph neural networks in GT implementation)
-- ONNX and onnx2torch (for MLP implementation)
-
 ## Results
 
-The framework generates comprehensive results in the `results/` directory:
+Both implementations generate comprehensive results including solution metrics, execution times, and gap analysis. See the individual README files for detailed information about results and output formats:
 
-### Graph Transformer Implementation Results
-
-#### 1. `neo_lrp_gt_results.xlsx`
-Contains comprehensive solution metrics including:
-- **Instance details**: Instance name and problem parameters
-- **Solution costs**: FLP cost, VRP cost, and total LRP cost
-- **Route information**: Number of routes in optimal solution
-- **Execution times**: LRP solver time, VROOM solver time
-- **Cost comparisons**: VROOM computed VRP cost vs. actual LRP cost
-- **Best known solutions (BKS)**: Benchmark comparison
-- **Gap analysis**: Optimization gap and prediction gap metrics
-
-### MLP Implementation Results
-
-#### 1. `neo_lrp_mlp_results.xlsx`
-Contains comprehensive solution metrics including:
-- **Instance details**: Instance name and problem parameters
-- **Solution costs**: FLP cost, VRP cost, and total LRP cost
-- **Route information**: Number of routes in optimal solution
-- **Execution times**: LRP solver time, VRPSolverEasy solver time
-- **Cost comparisons**: VRPSolverEasy computed VRP cost vs. actual LRP cost
-- **Best known solutions (BKS)**: Benchmark comparison
-- **Gap analysis**: Optimization gap and prediction gap metrics
-
-### 2. `solutions/` directory
-Contains intermediate VRP instances generated during optimization:
-- Individual depot-customer assignments
-- CVRPLIB format files for each feasible solution
-- Route cost predictions from neural network
-
-### 3. `log_files/` directory
-Contains detailed execution logs:
-- MIP solver logs
-- Neural network processing logs
-- Performance metrics and timing information
-
-## Execution Examples
-
-### Graph Transformer Implementation
-
-```bash
-cd neo-lrp
-source ../venv/bin/activate  # or activate your Python 3.11 environment
-python neo_lrp_execute_vroom.py
-```
-
-**Sample Output:**
-```
-Working on: ../prodhon_dataset/coord100-10-1.dat
-Run 1 for instance coord100-10-1.dat
-
-Adding neural embedding constraints...
-Gurobi Optimizer version 12.0.3 build v12.0.3rc0
-
-Optimal solution found (tolerance 1.00e-02)
-Best objective 2.232088769495e+05, best bound 2.223082800906e+05, gap 0.4035%
-
-[VROOM] depot 2 → cost=25396, routes=4
-[VROOM] depot 4 → cost=18747, routes=4
-[VROOM] depot 5 → cost=21126, routes=4
-Final VRP cost (variable+fixed): 65269
-Number of routes: 12
-```
-
-### MLP Implementation
-
-```bash
-cd neo-lrp-MLP
-source ../venv/bin/activate  # or activate your Python 3.11 environment
-python neo_lrp_execute.py
-```
-
-**Sample Output:**
-```
-Working on: ../prodhon_dataset/coord100-10-3.dat
-Run 1 for instance coord100-10-3.dat
-
-Adding neural embedding constraints...
-Gurobi Optimizer version 12.0.3 build v12.0.3rc0
-
-Optimal solution found (tolerance 1.00e-02)
-Best objective 2.709928196581e+05, best bound 2.706830699383e+05, gap 0.1143%
-
-[VRPSolverEasy] depot 2 → cost=29375, routes=8
-[VRPSolverEasy] depot 4 → cost=42732, routes=9
-[VRPSolverEasy] depot 5 → cost=33570, routes=8
-Final VRP cost (variable+fixed): 105677
-Number of routes: 25
-```
-
-**Note**: The system has been successfully tested and verified to work with:
-- Python 3.11
-- VROOM solver (pyvroom 1.14.0) for GT implementation
-- VRPSolverEasy with BaPCod library for MLP implementation
-- Gurobi optimizer
-- PyTorch with Graph Transformer networks
-- ONNX models for MLP implementation
+- Graph Transformer results: [neo-lrp-GT/README.md](neo-lrp-GT/README.md#results)
+- MLP results: [neo-lrp-MLP/README.md](neo-lrp-MLP/README.md#results)
 
 ### Training Data Generation
 

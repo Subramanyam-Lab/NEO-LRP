@@ -20,11 +20,10 @@ h5py>=3.0.0
 # Optimization libraries
 gurobipy>=10.0.0
 ortools>=9.0.0
-Pyomo>=6.0.0
-VRPSolverEasy>=0.1.0
+VRPSolverEasy>=0.1.0  # VRP solver (requires BaPCod library)
 
 # VRP solver
-pyvroom>=0.1.0
+pyvroom>=1.14.0  # Alternative VRP solver (used in GT implementation)
 
 # ONNX model support
 onnx>=1.12.0
@@ -34,9 +33,8 @@ onnx2torch>=1.5.0
 python-dateutil>=2.8.0
 pytz>=2020.1
 requests>=2.25.0
-packaging>=20.0
 typing_extensions>=4.0.0
 
-# Development and logging
+# Development and logging (optional)
 coloredlogs>=15.0
 humanfriendly>=10.0
