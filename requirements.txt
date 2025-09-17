@@ -8,14 +8,18 @@ scipy>=1.7.0
 
 # Graph processing and neural networks
 networkx>=3.0
-torch-scatter>=2.0.0
-torch-sparse>=0.6.0
-torch-cluster>=1.6.0
-torch-spline-conv>=1.2.0
+# torch-scatter>=2.0.0  # Skip - build issues, not needed for neo-lrp-GT
+# torch-sparse>=0.6.0   # Skip - build issues, not needed for neo-lrp-GT
+# torch-cluster>=1.6.0  # Skip - build issues, not needed for neo-lrp-GT
+# torch-spline-conv>=1.2.0  # Skip - build issues, not needed for neo-lrp-GT
 
 # Data processing and file I/O
 openpyxl>=3.0.0
 h5py>=3.0.0
+
+# Training dependencies
+wandb>=0.15.0
+schedulefree>=1.4.0
 
 # Optimization libraries
 gurobipy>=10.0.0

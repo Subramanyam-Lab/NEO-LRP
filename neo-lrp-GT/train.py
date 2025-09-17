@@ -1,9 +1,18 @@
 import os
+import argparse
 import torch
-import wandb
 import torch.nn as nn
 import schedulefree
 from torch_geometric.loader import DataLoader
+
+# Try to import wandb, but continue without it if not available
+try:
+    import wandb
+    WANDB_AVAILABLE = True
+except ImportError:
+    print("⚠️  wandb not available. Training will continue without logging.")
+    WANDB_AVAILABLE = False
+    wandb = None
 
 from net import GraphTransformerNetwork
 from utils import prepare_pretrain_data
@@ -22,10 +31,30 @@ def train(config, data_file):
     """
     Training loop for GraphTransformerNetwork.
     """
+    global WANDB_AVAILABLE
 
-    # Initialize wandb
-    run = wandb.init(project="graph-transformer-cvrp", config=config)
-    config = wandb.config
+    # Initialize wandb if available
+    run = None
+    wandb_enabled = WANDB_AVAILABLE
+
+    if wandb_enabled:
+        try:
+            run = wandb.init(project="graph-transformer-cvrp", config=config)
+            config = wandb.config
+            print("📊 W&B logging enabled")
+        except Exception as e:
+            print(f"⚠️  W&B initialization failed: {e}")
+            print("📊 Continuing without W&B logging")
+            wandb_enabled = False
+
+    if not wandb_enabled:
+        print("📊 Training without W&B logging")
+        # Convert config dict to object-like access
+        class ConfigObj:
+            def __init__(self, config_dict):
+                for key, value in config_dict.items():
+                    setattr(self, key, value)
+        config = ConfigObj(config)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"🚀 Using device: {device}")
@@ -36,7 +65,7 @@ def train(config, data_file):
 
     # Load dataset
     train_data, test_data, _ = prepare_pretrain_data(
-        "data/cvrp_data/train_data.h5",
+        data_file,
         split_ratios=[0.8, 0.2, 0.0],
     )
 
@@ -73,7 +102,8 @@ def train(config, data_file):
     optimizer = schedulefree.AdamWScheduleFree(model.parameters(), lr=config.initial_lr)
     criterion = get_loss_function(config.loss_function)
 
-    wandb.watch(model, log="all", log_freq=1)
+    if wandb_enabled and run is not None:
+        wandb.watch(model, log="all", log_freq=1)
 
     best_val_mape = float("inf")
 
@@ -96,9 +126,10 @@ def train(config, data_file):
 
         avg_train_loss = total_loss / len(train_loader)
         avg_train_mape = total_mape / len(train_loader)
-        wandb.log(
-            {"epoch": epoch, "train_loss": avg_train_loss, "train_mape": avg_train_mape}
-        )
+        if wandb_enabled and run is not None:
+            wandb.log(
+                {"epoch": epoch, "train_loss": avg_train_loss, "train_mape": avg_train_mape}
+            )
 
         # ---- Validation ----
         model.eval()
@@ -114,17 +145,20 @@ def train(config, data_file):
 
             avg_val_loss = val_loss / len(test_loader)
             avg_val_mape = val_mape / len(test_loader)
-            wandb.log(
-                {"epoch": epoch, "val_loss": avg_val_loss, "val_mape": avg_val_mape}
-            )
+            if wandb_enabled and run is not None:
+                wandb.log(
+                    {"epoch": epoch, "val_loss": avg_val_loss, "val_mape": avg_val_mape}
+                )
 
             # Save best model
             if avg_val_mape < best_val_mape:
                 best_val_mape = avg_val_mape
                 os.makedirs("model_state", exist_ok=True)
+                # Use a sanitized file identifier (basename without extension)
+                base_id = os.path.splitext(os.path.basename(data_file))[0]
                 torch.save(
                     model.state_dict(),
-                    f"model_state/tf_{data_file}_epoch{epoch}.pth",
+                    f"model_state/tf_{base_id}_epoch{epoch}.pth",
                 )
 
         print(
@@ -133,4 +167,40 @@ def train(config, data_file):
             f"Val Loss: {avg_val_loss:.4f}, Val MAPE: {avg_val_mape:.2f}"
         )
 
-    run.finish()
+    if wandb_enabled and run is not None:
+        run.finish()
+
+
+if __name__ == "__main__":
+    # Minimal CLI to accept a user-supplied HDF5 training file
+    parser = argparse.ArgumentParser(description="Train GraphTransformer on CVRP HDF5 data")
+    parser.add_argument(
+        "--data-file",
+        type=str,
+        required=True,
+        help="Path to HDF5 training data file",
+    )
+
+    # Provide a minimal default config so the script can run out-of-the-box
+    default_config = {
+        "encoding_dim": 64,
+        "batch_size": 64,
+        "dropout": 0.1,
+        "initial_lr": 1e-3,
+        "heads": 8,
+        "normalization": "graph_norm",
+        "activation": "elu",
+        "num_gat_layers": 3,
+        "loss_function": "smooth_l1",
+        "beta": True,
+        "decode_method": "pool",
+        "epochs": 100,
+    }
+
+    args = parser.parse_args()
+
+    if not os.path.isfile(args.data_file):
+        raise FileNotFoundError(f"HDF5 data file not found: {args.data_file}")
+
+    # Kick off training with defaults; override via wandb if desired
+    train(default_config, args.data_file)

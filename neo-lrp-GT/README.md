@@ -49,24 +49,28 @@ Use the pre-training script to find optimal hyperparameters:
 
 ```bash
 cd ../neo-lrp-GT
-python pre_train.py
+python pre_train.py --data-file /path/to/your/training_data.h5 --count 100
 ```
 
 This script uses Weights & Biases (wandb) to perform Bayesian optimization over various hyperparameters including network architecture, learning rate, and training settings.
 
-**Note:** Make sure to update the data path in `pre_train.py` to point to your generated training data.
+**Arguments:**
+- `--data-file`: **Required**. Path to HDF5 training data file
+- `--count`: Number of sweep runs to execute (default: 100)
 
 #### 3. Model Training
 
 Once you have optimal hyperparameters, train the final model:
 
 ```bash
-python train.py
+python train.py --data-file /path/to/your/training_data.h5
 ```
 
+**Arguments:**
+- `--data-file`: **Required**. Path to HDF5 training data file
+
 **Configuration:**
-- Update the data path in `train.py` to use your training data
-- Modify hyperparameters based on results from step 2
+- Modify hyperparameters in the script based on results from step 2
 - The script will save the best model to the `model_state/` directory
 
 #### 4. Using Your Trained Model
@@ -82,6 +86,20 @@ Then run the execution script:
 ```bash
 python neo_lrp_execute_vroom.py
 ```
+
+## Test Data
+
+For testing and demonstration purposes, a small test dataset `test_data.h5` is included in this directory. This file was generated using sample CVRPLIB instances and can be used to quickly test the training scripts:
+
+```bash
+# Test pre-training with the included test data
+python pre_train.py --data-file test_data.h5 --count 5
+
+# Test training with the included test data
+python train.py --data-file test_data.h5
+```
+
+**Note:** The test dataset is small and intended only for testing functionality. For actual training, generate larger datasets using the methods described above.
 
 ## Configuration
 
@@ -147,103 +165,38 @@ Number of routes: 12
 
 ## CVRPLIB Training Pipeline
 
-In addition to the standard training workflow, this implementation provides a specialized pipeline for training with CVRPLIB instances. This allows you to use benchmark VRP instances from the CVRPLIB repository as training data.
+Train the Graph Transformer using CVRPLIB benchmark instances.
 
-### Overview
-
-The CVRPLIB pipeline processes standard .vrp format files and converts them to HDF5 format compatible with the Graph Transformer training. The pipeline automatically:
-
-1. Reads CVRPLIB instances (.vrp format) using the vrplib library
-2. Generates optimal solutions using VROOM solver (if .sol files don't exist)
-3. Converts the data to HDF5 format for neural network training
-4. Preserves solution timing information for analysis
-
-### Requirements
-
-Install additional dependencies for CVRPLIB processing:
+### Quick Start
 
 ```bash
-pip install vrplib
-```
-
-### Usage
-
-#### 1. Prepare CVRPLIB Instances
-
-Organize your .vrp files in a single directory:
-
-```
-cvrplib_instances/
-├── A-n32-k5.vrp
-├── A-n33-k5.vrp
-├── A-n34-k5.vrp
-└── ...
-```
-
-Optional: Include corresponding .sol files if available:
-
-```
-cvrplib_instances/
-├── A-n32-k5.vrp
-├── A-n32-k5.sol    # Optional: will be generated if missing
-├── A-n33-k5.vrp
-└── ...
-```
-
-#### 2. Process Instances
-
-Convert CVRPLIB instances to HDF5 training format using the processor in the training_data_sampling directory:
-
-```bash
+# 1. Process CVRPLIB data (.vrp files → .h5 training data)
 cd training_data_sampling
-python cvrplib_processor.py /path/to/cvrplib_instances cvrplib_train_data.h5
+python cvrplib_processor.py /path/to/vrp/files output_data.h5
+
+# 2. Pre-train (optional)
+cd ../neo-lrp-GT
+python pre_train_simple.py --data-file ../training_data_sampling/output_data.h5 --epochs 50
+
+# 3. Train model
+python train.py --data-file ../training_data_sampling/output_data.h5
 ```
 
-**Command Options:**
-- `input_folder`: Directory containing .vrp files
-- `output_file`: Output HDF5 file path
-- `--log-level`: Logging verbosity (DEBUG, INFO, WARNING, ERROR)
-- `--force-regenerate`: Force regenerate solutions even if .sol files exist (original files will be backed up)
-- `--time-limit`: Time limit for VROOM solver in seconds (default: 300)
+**Note:** Place your `.vrp` files in the `/path/to/vrp/files` directory. The processor will automatically generate solutions using VROOM if `.sol` files are missing.
 
-**Example:**
-```bash
-python cvrplib_processor.py ../cvrplib_instances cvrplib_train_data.h5 --log-level INFO
-```
-
-**Force Regeneration Example:**
-```bash
-# Force regenerate all solutions with backup
-python cvrplib_processor.py ../cvrplib_instances cvrplib_train_data.h5 --force-regenerate
-```
-
-**Time Limit Examples:**
-```bash
-# Set custom time limit (10 minutes)
-python cvrplib_processor.py ../cvrplib_instances cvrplib_train_data.h5 --time-limit 600
-
-# Combine options: force regenerate with 1-minute time limit
-python cvrplib_processor.py ../cvrplib_instances cvrplib_train_data.h5 --force-regenerate --time-limit 60
-```
-
-#### 3. Train with CVRPLIB Data
-
-Update `neo-lrp-GT/train.py` to use the processed CVRPLIB data:
-
-```python
-# In train.py, modify the data loading section:
-train_data, test_data, _ = prepare_pretrain_data(
-    "../training_data_sampling/cvrplib_train_data.h5",  # Use CVRPLIB data
-    split_ratios=[0.8, 0.2, 0.0],
-)
-```
-
-Then run training as usual:
+### Test with Included Data
 
 ```bash
-cd neo-lrp-GT
-python train.py
+# Test the pipeline with existing test data
+cd neo-lrp-GT/tests
+./test_pipeline_quick.sh
+
+# Train with test data
+cd ../
+python train.py --data-file test_data.h5
 ```
+
+
 
 ### Pipeline Features
 

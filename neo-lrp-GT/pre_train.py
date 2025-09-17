@@ -1,3 +1,5 @@
+import argparse
+import os
 import wandb
 import torch
 import schedulefree
@@ -34,13 +36,16 @@ sweep_id = wandb.sweep(sweep_config, project="2evrp-ncp-scaled")
 def mape(pred, target):
     return torch.mean(torch.abs((target - pred) / (target))) * 100
 
-def train(config = None):
+def train(config = None, data_file = None):
+    if data_file is None:
+        raise ValueError("HDF5 training data file must be provided")
+
     run = wandb.init(project = '2evrp-ncp', config = config)
     config = wandb.config
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     train_data, val_data, _ = prepare_pretrain_data(
-        'data/GT_phase2/cvrp_data/gt_phase2-1_mix_shuffle_50k.h5',
+        data_file,
         split_ratios=[0.8, 0.2, 0.0]
     )
 
@@ -110,5 +115,27 @@ def train(config = None):
 
     run.finish()
 
+def create_sweep_with_data_file(data_file):
+    """Create a sweep agent that uses the specified data file."""
+    def train_wrapper():
+        return train(data_file=data_file)
+    return train_wrapper
+
 if __name__ == "__main__":
-    wandb.agent(sweep_id, train, count = 100)
+    parser = argparse.ArgumentParser(description="Pre-train GraphTransformer with hyperparameter sweep")
+    parser.add_argument("--data-file", type=str, required=True,
+                       help="Path to HDF5 training data file")
+    parser.add_argument("--count", type=int, default=100,
+                       help="Number of sweep runs to execute")
+
+    args = parser.parse_args()
+
+    if not os.path.isfile(args.data_file):
+        raise FileNotFoundError(f"HDF5 data file not found: {args.data_file}")
+
+    print(f"🚀 Starting hyperparameter sweep with data file: {args.data_file}")
+    print(f"📊 Running {args.count} sweep iterations")
+
+    # Create sweep agent with custom data file
+    sweep_function = create_sweep_with_data_file(args.data_file)
+    wandb.agent(sweep_id, sweep_function, count=args.count)

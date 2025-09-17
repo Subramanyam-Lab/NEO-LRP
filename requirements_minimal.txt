@@ -1,0 +1,45 @@
+# Core dependencies
+torch>=2.0.0
+torchvision>=0.15.0
+torch-geometric>=2.0.0
+numpy>=1.20.0
+pandas>=1.3.0
+scipy>=1.7.0
+
+# Graph processing and neural networks
+networkx>=3.0
+# torch-scatter>=2.0.0  # Skip - build issues, torch-geometric has built-in alternatives
+# torch-sparse>=0.6.0   # Skip - build issues, torch-geometric has built-in alternatives
+# torch-cluster>=1.6.0  # Skip - build issues, torch-geometric has built-in alternatives
+# torch-spline-conv>=1.2.0  # Skip - build issues, rarely used
+
+# Data processing and file I/O
+openpyxl>=3.0.0
+h5py>=3.0.0
+
+# Essential for training
+wandb>=0.15.0
+schedulefree>=1.4.0
+
+# VRP and data processing
+vrplib>=1.0.0    # CVRPLIB instance reader/writer for training data pipeline
+pyvroom>=1.14.0  
+
+# Optimization libraries (optional - install separately if needed)
+# gurobipy>=10.0.0  # Commercial license required
+# ortools>=9.0.0    # Large package, install if needed
+# VRPSolverEasy>=0.1.0  # Requires BaPCod library
+
+# ONNX model support (optional)
+# onnx>=1.12.0      # Install if ONNX export needed
+# onnx2torch>=1.5.0 # Install if ONNX import needed
+
+# Utilities
+python-dateutil>=2.8.0
+pytz>=2020.1
+requests>=2.25.0
+typing_extensions>=4.0.0
+
+# Development and logging (optional)
+coloredlogs>=15.0
+humanfriendly>=10.0
