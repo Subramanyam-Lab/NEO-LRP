@@ -1,3 +1,11 @@
+# data files
+*.h5
+*backup*.sol 
+
+# IDE settings
+.claude 
+.vscode 
+
 # Python
 __pycache__/
 *.py[cod]

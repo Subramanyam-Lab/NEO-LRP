@@ -24,6 +24,7 @@ VRPSolverEasy>=0.1.0  # VRP solver (requires BaPCod library - see README for ins
 
 # VRP solvers
 pyvroom>=1.14.0  # Alternative VRP solver (used in GT implementation)
+vrplib>=1.0.0    # CVRPLIB instance reader/writer for training data pipeline
 # Note: BaPCod library required for VRPSolverEasy
 # - Intel Macs: Download from https://bapcod.math.u-bordeaux.fr
 # - Apple Silicon Macs: Use x86_64 Python with Rosetta 2

@@ -145,8 +145,209 @@ Final VRP cost (variable+fixed): 65269
 Number of routes: 12
 ```
 
+## CVRPLIB Training Pipeline
+
+In addition to the standard training workflow, this implementation provides a specialized pipeline for training with CVRPLIB instances. This allows you to use benchmark VRP instances from the CVRPLIB repository as training data.
+
+### Overview
+
+The CVRPLIB pipeline processes standard .vrp format files and converts them to HDF5 format compatible with the Graph Transformer training. The pipeline automatically:
+
+1. Reads CVRPLIB instances (.vrp format) using the vrplib library
+2. Generates optimal solutions using VROOM solver (if .sol files don't exist)
+3. Converts the data to HDF5 format for neural network training
+4. Preserves solution timing information for analysis
+
+### Requirements
+
+Install additional dependencies for CVRPLIB processing:
+
+```bash
+pip install vrplib
+```
+
+### Usage
+
+#### 1. Prepare CVRPLIB Instances
+
+Organize your .vrp files in a single directory:
+
+```
+cvrplib_instances/
+├── A-n32-k5.vrp
+├── A-n33-k5.vrp
+├── A-n34-k5.vrp
+└── ...
+```
+
+Optional: Include corresponding .sol files if available:
+
+```
+cvrplib_instances/
+├── A-n32-k5.vrp
+├── A-n32-k5.sol    # Optional: will be generated if missing
+├── A-n33-k5.vrp
+└── ...
+```
+
+#### 2. Process Instances
+
+Convert CVRPLIB instances to HDF5 training format using the processor in the training_data_sampling directory:
+
+```bash
+cd training_data_sampling
+python cvrplib_processor.py /path/to/cvrplib_instances cvrplib_train_data.h5
+```
+
+**Command Options:**
+- `input_folder`: Directory containing .vrp files
+- `output_file`: Output HDF5 file path
+- `--log-level`: Logging verbosity (DEBUG, INFO, WARNING, ERROR)
+- `--force-regenerate`: Force regenerate solutions even if .sol files exist (original files will be backed up)
+- `--time-limit`: Time limit for VROOM solver in seconds (default: 300)
+
+**Example:**
+```bash
+python cvrplib_processor.py ../cvrplib_instances cvrplib_train_data.h5 --log-level INFO
+```
+
+**Force Regeneration Example:**
+```bash
+# Force regenerate all solutions with backup
+python cvrplib_processor.py ../cvrplib_instances cvrplib_train_data.h5 --force-regenerate
+```
+
+**Time Limit Examples:**
+```bash
+# Set custom time limit (10 minutes)
+python cvrplib_processor.py ../cvrplib_instances cvrplib_train_data.h5 --time-limit 600
+
+# Combine options: force regenerate with 1-minute time limit
+python cvrplib_processor.py ../cvrplib_instances cvrplib_train_data.h5 --force-regenerate --time-limit 60
+```
+
+#### 3. Train with CVRPLIB Data
+
+Update `neo-lrp-GT/train.py` to use the processed CVRPLIB data:
+
+```python
+# In train.py, modify the data loading section:
+train_data, test_data, _ = prepare_pretrain_data(
+    "../training_data_sampling/cvrplib_train_data.h5",  # Use CVRPLIB data
+    split_ratios=[0.8, 0.2, 0.0],
+)
+```
+
+Then run training as usual:
+
+```bash
+cd neo-lrp-GT
+python train.py
+```
+
+### Pipeline Features
+
+#### Automatic Solution Generation
+
+If a .sol file doesn't exist for a .vrp instance, the pipeline automatically:
+- Uses VROOM solver to generate optimal solutions
+- Records solution time for performance analysis
+- Saves the solution as a .sol file for future use
+
+#### Force Regeneration and Backup
+
+When using the `--force-regenerate` option, the pipeline will:
+- Regenerate solutions even if .sol files already exist
+- Automatically backup original .sol files with timestamp (e.g., `A-n32-k5_backup_20240917_143052.sol`)
+- Generate fresh solutions using VROOM
+- Preserve all original solutions for comparison
+
+#### VROOM Solver Time Limits
+
+The pipeline includes time limit controls for VROOM solver performance:
+- **Default time limit**: 300 seconds (5 minutes) per instance
+- **Customizable**: Use `--time-limit` to set custom limits
+- **Timeout handling**: Instances that exceed time limits are marked as failed with informative logging
+- **Performance monitoring**: Actual solve times are recorded for analysis
+
+**Time Limit Guidelines:**
+- Small instances (< 50 nodes): 30-60 seconds usually sufficient
+- Medium instances (50-200 nodes): 300-600 seconds recommended
+- Large instances (> 200 nodes): 600+ seconds may be needed
+- For batch processing: Consider shorter limits to avoid hanging on difficult instances
+
+#### Data Format Compatibility
+
+The processor ensures full compatibility with the existing training pipeline by:
+- Converting coordinates to the expected HDF5 format
+- Generating distance matrices automatically
+- Creating proper node features (x, y, is_depot, demand)
+- Maintaining cost and mask information
+
+#### Logging and Monitoring
+
+The processor provides detailed logging:
+- Instance processing progress
+- Solution generation status
+- Conversion success/failure tracking
+- Performance timing information
+
+**Sample Output:**
+```
+INFO:cvrplib_processor:Found 50 .vrp files in ../cvrplib_instances
+INFO:cvrplib_processor:Processing A-n32-k5.vrp
+INFO:cvrplib_processor:No solution found for A-n32-k5.vrp, generating with VROOM
+INFO:cvrplib_processor:Successfully processed A-n32-k5.vrp
+...
+INFO:cvrplib_processor:Processing complete!
+INFO:cvrplib_processor:Successfully processed: 48
+INFO:cvrplib_processor:Failed: 2
+INFO:cvrplib_processor:Total time: 124.56 seconds
+```
+
+### Integration with Existing Workflow
+
+The CVRPLIB pipeline is designed as an augmenting component that doesn't interfere with existing workflows:
+
+- **Standalone Operation**: Can be run independently to generate training data
+- **Format Compatibility**: Outputs standard HDF5 format used by train.py
+- **Flexible Input**: Works with any .vrp files following CVRPLIB format
+- **Solution Preservation**: Maintains generated .sol files for future reference
+
+### Testing and Demo
+
+To test the CVRPLIB pipeline or see a demonstration:
+
+```bash
+# Run comprehensive test suite
+cd training_data_sampling
+python test_cvrplib_pipeline.py
+
+# Run demo with sample data
+python demo_cvrplib_pipeline.py
+```
+
+The test suite validates the complete pipeline including vrplib reading, VROOM solution generation, HDF5 conversion, and compatibility with the training system.
+
+### Best Practices
+
+1. **Instance Selection**: Choose diverse instances with varying sizes and characteristics
+2. **Solution Verification**: Verify generated solutions match expected costs when available
+3. **Data Split**: Use appropriate train/validation splits for generalization
+4. **Performance Monitoring**: Monitor VROOM solution times for computational budget planning
+
+### Troubleshooting
+
+**Common Issues:**
+
+- **Missing vrplib**: Install with `pip install vrplib`
+- **VROOM failures**: Ensure instances have valid coordinate and demand data
+- **Memory issues**: Process large datasets in batches if needed
+- **Permission errors**: Ensure write access to output directory
+
 **Note**: The system has been successfully tested and verified to work with:
 - Python 3.11
 - VROOM solver (pyvroom 1.14.0)
 - Gurobi optimizer
 - PyTorch with Graph Transformer networks
+- vrplib library for CVRPLIB processing
