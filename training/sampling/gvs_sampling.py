@@ -46,4 +46,4 @@ with open("generation.sh", "w") as bash_script:
 
     bash_script.write("\necho 'All VRP instances have been generated.'\n")
 
-print("Bash script 'run_vrp_generation.sh' has been created successfully.")
+print("Bash script 'generation.sh' has been created successfully.")
