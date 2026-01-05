@@ -91,13 +91,13 @@ def solve_cvrp_vroom(depot_coord, cust_coords, cust_demands, vehicle_cap,
 
 def write_solution_to_file(instance_path, instance_file, mode,
                            vroom_cost, vroom_routes, vroom_time, vroom_routes_info):
-    suffix = "" if mode == "scaled" else f"_{mode}"
+    suffix = "_scaled" if mode == "scaled" else f"_{mode}"
     
     with open(instance_path, "a") as file:
         file.write(f"\n#cost_vroom{suffix} {vroom_cost}\n")
         file.write(f"#num_routes_vroom{suffix} {vroom_routes}\n")
-        file.write(f"#solve_time_vroom{suffix} {vroom_time:.2f}s\n")
-        file.write(f"#actual_routes_vroom{suffix} {vroom_routes_info}\n")
+        file.write(f"#solve_time_vroom {vroom_time:.2f}s\n")
+        file.write(f"#actual_routes_vroom {vroom_routes_info}\n")
         file.write("#EOF\n")
 
 
