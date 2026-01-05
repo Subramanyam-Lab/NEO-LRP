@@ -10,7 +10,6 @@ def create_data(file_loc):
         item = line.rstrip().split()
         if len(item)!=0:
             data1.append(item)
-
     
     # Number of Customers
     no_cust= int(float(data1[0][0]))
@@ -42,7 +41,6 @@ def create_data(file_loc):
     for k in range(start,end):
         depot_cap.append(int(float(data1[k][0])))
    
-
     # Customer Capacities
     dem_end=end+no_cust
     cust_dem=[]
@@ -54,17 +52,12 @@ def create_data(file_loc):
     cost_end=dem_end+no_depot
     for x in range (dem_end,cost_end):
         open_dep_cost.append(int(float(data1[x][0])))
-    
-
 
     route_cost=int(float(data1[cost_end][0]))
 
     rc_cal_index=int(data1[cost_end+1][0])
 
-
     return [no_cust,no_depot,depot_cord,cust_cord,vehicle_cap,depot_cap,cust_dem,open_dep_cost,route_cost,rc_cal_index]
-
-
 
 def dist_calc(cord_set1,cord_set2,rc_cal_index):
     
@@ -155,6 +148,7 @@ def norm_data(cord_set1,cord_set2,veh_cap,cust_dem,rc_cal_index):
         norm_df['y']=mod_coord_y
         norm_df['dem']=norm_cust_dem
         facility_dict[j]=norm_df
+        
     return facility_dict, big_m,cost_norm_factor
     
     
