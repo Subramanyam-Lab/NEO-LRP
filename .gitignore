@@ -9,6 +9,7 @@ __pycache__/
 *.onnx
 
 cleanup_labels.py
+trained_models_
 
 # Distribution / packaging
 .Python
