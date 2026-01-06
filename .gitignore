@@ -8,8 +8,14 @@ __pycache__/
 *.sh
 *.onnx
 
+*.err
+*.out 
+*.csv
+*.yaml
+
 cleanup_labels.py
 trained_models_
+checkpoints_*
 
 # Distribution / packaging
 .Python
