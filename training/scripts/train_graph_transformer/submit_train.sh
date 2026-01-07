@@ -3,7 +3,7 @@
 #SBATCH --mem=100GB
 #SBATCH --job-name=GT_train
 #SBATCH --output=GT_train_%j.out
-#SBATCH --time=3-00:00:00
+#SBATCH --time=24:00:00
 #SBATCH --error=GT_train_%j.err
 #SBATCH --account=azs7266_p_gpu
 #SBATCH --partition=sla-prio
@@ -30,7 +30,7 @@ normalization_modes=("cost_over_fi" "cost_over_fi_minmax" "minmax" "raw")
 
 total_start=$SECONDS
 
-for MODE in "scaled" "unscaled"; do
+for MODE in "scaled"; do
 
     echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     echo "Starting MODE: $MODE"
