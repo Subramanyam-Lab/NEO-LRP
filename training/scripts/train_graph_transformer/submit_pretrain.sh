@@ -27,14 +27,14 @@ FILE_PATH_TEST="${DATA_DIR}/test.txt"
 # hpo parameters
 SWEEP_COUNT=50
 num_instances_array=(110000)
-normalization_modes=("cost_over_fi" "cost_over_fi_minmax" "minmax" "raw")
+normalization_modes=("cost_over_fi")
 
 export WANDB_API_KEY="66baf9785056b77668f72326e9c9a4f359a4f812"
 # export WANDB_DISABLED="true"  # we can uncomment to disable wandb
 
 total_start=$SECONDS
 
-for MODE in "scaled" "unscaled"; do
+for MODE in "scaled"; do
 
     echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     echo "Starting HPO MODE: $MODE"
@@ -63,7 +63,7 @@ for MODE in "scaled" "unscaled"; do
         export normalization_mode="$normalization_mode"
 
         for num_instances in "${num_instances_array[@]}"; do
-            echo "    HPO: n=$num_instances"
+            echo "HPO: n=$num_instances"
 
             config_start=$SECONDS
             export num_instances="$num_instances"
