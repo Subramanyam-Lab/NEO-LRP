@@ -57,7 +57,7 @@ print(f"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 sweep_config = {
     "method": "bayes",
-    "metric": {"name": "val_loss", "goal": "minimize"},
+    "metric": {"name": "val_mape", "goal": "minimize"},
     "parameters": {
         "encoding_dim":   {"values": [8, 16, 32, 64, 128]},
         "batch_size":     {"values": [8, 16, 32, 64, 128]},
@@ -188,7 +188,7 @@ def train(config=None):
     if not WANDB_DISABLED:
         wandb.watch(model, log="all", log_freq=1)
 
-    best_val_loss = float("inf")
+    best_val_mape = float("inf")
     best_out_file = os.path.join(output_dir, f"best_{mode}_{normalization_mode}_{num_instances}.txt")
     os.makedirs(output_dir, exist_ok=True)
 
@@ -234,14 +234,14 @@ def train(config=None):
             if not WANDB_DISABLED:
                 wandb.log({"epoch": epoch, "val_mape": avg_val_mape, "val_loss": avg_val_loss})
 
-            if avg_val_loss < best_val_loss:
-                best_val_loss = avg_val_loss
+            if avg_val_mape < best_val_mape:
+                best_val_mape = avg_val_mape
 
                 plain = _cfg_to_plain_dict(cfg)
                 plain_sorted = {k: plain[k] for k in sorted(plain)}
                 lines = []
                 lines.append("~~~~~~  NEW BEST ~~~~~~\n")
-                lines.append(f"val_loss: {float(best_val_loss):.6f}\n")
+                lines.append(f"val_mape: {float(best_val_mape):.6f}\n")
                 if not WANDB_DISABLED:
                     run_url = f"https://wandb.ai/{wandb.run.entity}/{wandb.run.project}/runs/{wandb.run.id}"
                     lines.append(f"wandb_run_id: {wandb.run.id}\n")
