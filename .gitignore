@@ -172,3 +172,7 @@ cython_debug/
 #.idea/
 training/data/h5_cache/
 training/results
+output
+.dot
+.xlsx
+.json
