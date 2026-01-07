@@ -80,7 +80,7 @@ def mape(pred, target):
 
 
 def train():
-    epochs = 50
+    epochs = 150
 
     # get or create h5 file
     data_h5_path = get_or_create_h5()
@@ -88,7 +88,6 @@ def train():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
 
-    # load data
     train_data, val_data, _ = prepare_pretrain_data(
         data_h5_path,
         split_ratios=[0.9, 0.1, 0.0],
@@ -96,17 +95,17 @@ def train():
     )
     print(f"Training samples: {len(train_data)}, Validation samples: {len(val_data)}")
 
-    # best config from hpo
+    # best config from HPO (run 2ezwqf1w val_mape=2.476)
     config = {
-        'encoding_dim': 32,
-        'batch_size': 32,
-        'dropout': 0.4,
+        'encoding_dim': 64,
+        'batch_size': 128,
+        'dropout': 0.2,
         'initial_lr': 0.0001,
-        'heads': 4,
-        'normalization': 'batch_norm',
-        'activation': 'leaky_relu',
-        'num_gat_layers': 3,
-        'loss_function': 'huber',
+        'heads': 8,
+        'normalization': 'layer_norm',
+        'activation': 'elu',
+        'num_gat_layers': 5,
+        'loss_function': 'mse',
         'beta': True,
         'decode_method': 'pool'
     }
