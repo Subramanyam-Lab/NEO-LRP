@@ -177,3 +177,6 @@ output
 .xlsx
 .json
 wandb
+*.pdf
+*.png 
+*.tex
