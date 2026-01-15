@@ -1,3 +1,9 @@
+"""
+Data preprocessing for DeepSets training.
+Parses CVRP instance files, normalizes coordinates and costs, handles padding,
+and exports to NumPy arrays (used in training DS). Supports multiple normalization modes.
+"""
+
 import os
 import random
 import numpy as np
@@ -7,8 +13,8 @@ import re
 import json
 import h5py
 
-DEPOT_INDICATOR = False 
-HB5_EXPORT      = False 
+DEPOT_INDICATOR = False
+HB5_EXPORT      = False
 PADDING         = True
 
 print("Using updated data preprocessing updated...")
@@ -37,10 +43,9 @@ class InstanceNew:
             print(f"Warning: unusual NAME format: '{full_name}', using full string.")
             self.name = full_name
 
-        # Parse capacity
         self.capacity = float(next(line.split(":")[1].strip() for line in problem_lines if line.startswith("CAPACITY :")))
 
-        # Parse NODE_COORD_SECTION
+
         node_coord_start = next(i for i, line in enumerate(problem_lines) if line.startswith("NODE_COORD_SECTION")) + 1
         demand_start = next(i for i, line in enumerate(problem_lines) if line.startswith("DEMAND_SECTION"))
 
@@ -57,7 +62,6 @@ class InstanceNew:
             else:
                 self.customers.append({'x': x, 'y': y, 'idx': int(idx)})
 
-        # Parse demands
         for line in problem_lines[demand_start + 1:]:
             if line.startswith("DEPOT_SECTION"):
                 break
@@ -69,7 +73,6 @@ class InstanceNew:
                 continue
             self.customers[index - 2]['demand'] = demand / self.capacity
 
-        # Metadata
         self.metadata = {}
         for line in metadata_lines:
             if line.startswith("#"):
@@ -92,7 +95,6 @@ class InstanceNew:
         self.solve_time = parse_numeric_value(solve_time_val)
         self.actual_routes = self.metadata.get(actual_routes_key, "[]")
 
-        # Compute fi
         x_all = [self.depot['x']] + [c['x'] for c in self.customers]
         y_all = [self.depot['y']] + [c['y'] for c in self.customers]
         x_shifted = np.array(x_all) - self.depot['x']
@@ -102,13 +104,11 @@ class InstanceNew:
         if fi < 1e-9:
             fi = 1.0
 
-        # Normalize
         for c in self.customers:
             c['x'] = (c['x'] - self.depot['x']) / fi
             c['y'] = (c['y'] - self.depot['y']) / fi
 
         if hb5_export:
-            # Include depot at index 0
             x_coords = [0.0] + [c['x'] for c in self.customers]
             y_coords = [0.0] + [c['y'] for c in self.customers]
             demands  = [0.0] + [c['demand'] for c in self.customers]
