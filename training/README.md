@@ -57,9 +57,7 @@ For more details on scaled and unscaled, please refer to Section 5 (Experimental
 
 **Configuration:** The solver timeout is set to 5 seconds per instance. To modify, change the `timeout_sec` parameter in the `solve_cvrp_vroom()` function call in `labeling/label_generator.py`.
 
-**Concatenate:** After labeling, concatenate files into training and test sets. We use 110K instances for `train_val.txt` and 10K for `test.txt`:
-
-The pre-generated data files we provide in `training/data/` follow this split.
+After labeling, concatenate files into training and test sets. We use 110K instances for `train_val.txt` and 10K for `test.txt`. The pre-generated data files we provide in `training/data/` follow this split.
 
 ---
 
