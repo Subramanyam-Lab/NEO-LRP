@@ -80,7 +80,7 @@ def mape(pred, target):
 
 
 def train():
-    epochs = 150
+    epochs = 50
 
     # get or create h5 file
     data_h5_path = get_or_create_h5()
@@ -95,18 +95,17 @@ def train():
     )
     print(f"Training samples: {len(train_data)}, Validation samples: {len(val_data)}")
 
-    # best config from HPO (run 2ezwqf1w val_mape=2.476)
     config = {
-        'encoding_dim': 64,
-        'batch_size': 128,
-        'dropout': 0.2,
-        'initial_lr': 0.0001,
-        'heads': 8,
-        'normalization': 'layer_norm',
+        'encoding_dim': 16,
+        'batch_size': 8,
+        'dropout': 0.3,
+        'initial_lr': 0.001,
+        'heads': 4,
+        'normalization': 'graph_norm',
         'activation': 'elu',
         'num_gat_layers': 5,
-        'loss_function': 'mse',
-        'beta': True,
+        'loss_function': 'huber',
+        'beta': False,
         'decode_method': 'pool'
     }
 
