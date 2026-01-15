@@ -1,3 +1,9 @@
+"""
+CVRP label generator using VROOM solver.
+Solves CVRP instances and appends routing costs, number of routes and route details
+to instance files. Supports both scaled and unscaled appraoches.
+"""
+
 import math
 import os
 import argparse
@@ -37,7 +43,6 @@ def timeout_wrapper(func, timeout, *args, **kwargs):
 def solve_cvrp_vroom(depot_coord, cust_coords, cust_demands, vehicle_cap,
                      scale_factor=1, fixed_vehicle_cost=0,
                      exploration_level=5, nb_threads=4, timeout_sec=5):
-    """Solve CVRP with VROOM."""
     n = len(cust_coords)
     points = [depot_coord] + cust_coords
     dist_matrix = [
