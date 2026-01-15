@@ -1,3 +1,9 @@
+"""
+Utility functions for Graph Transformer data loading and instance parsing.
+Handles HDF5 data loading for PyTorch Geometric, LRP instance parsing,
+coordinate normalization and BKS loading for evaluation.
+"""
+
 import h5py
 import numpy as np
 from torch_geometric.data import Data
