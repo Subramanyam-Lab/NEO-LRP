@@ -61,12 +61,23 @@ After labeling, concatenate files into training and test sets. We use 110K insta
 
 ---
 
-## Step 3A: Training DeepSets
+## Step 3a: Training DeepSets
 
-*(Documentation to be added)*
+Training scripts are in `scripts/train_deepsets/`. The training uses [DeepHyper](https://github.com/deephyper/deephyper) for hyperparameter optimization.
+
+**Run:**
+```bash
+cd scripts/train_deepsets
+# 1. Edit submit.sh: set BASE_DIR, conda environment, and SLURM parameters (if using SLURM)
+# 2. Run training
+sbatch submit.sh        # if using SLURM
+bash submit.sh          # if running locally (remove #SBATCH lines first)
+```
+
+**Configuration:** HPO parameters can be modified in `hpo.py`. Training parameters (num_instances, max_evals, normalization_modes) can be adjusted in `submit.sh`.
 
 ---
 
-## Step 3B: Training Graph Transformer
+## Step 3b: Training Graph Transformer
 
 *(Documentation to be added)*
