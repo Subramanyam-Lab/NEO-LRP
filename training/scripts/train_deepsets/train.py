@@ -1,3 +1,9 @@
+"""
+DeepSets training script with early stopping and model checkpointing.
+Trains phi and rho network for routing cost prediction,
+exports trained models to ONNX format and also tracks comprehensive metrics.
+"""
+
 import matplotlib.pyplot as plt
 import torch
 from torch.utils.data import TensorDataset, DataLoader
@@ -72,11 +78,9 @@ def master(config, metrics=True, exportonnx=True, testing=True, seed=42, N_dim=3
     num_epochs = int(config["num_epochs"])
     learning_rate = config["learning_rate"]
 
-    # Define a directory to save model checkpoints
     checkpoint_dir = f"checkpoints_{checkpoint_suffix}"
     os.makedirs(checkpoint_dir, exist_ok=True)
 
-    # Define paths for saving models with num_instances appended
     best_model_path = os.path.join(checkpoint_dir, f'best_model_{num_instances}.pth')
     last_epoch_model_path = os.path.join(checkpoint_dir, f'last_epoch_model_{num_instances}.pth')
 
@@ -164,25 +168,18 @@ def master(config, metrics=True, exportonnx=True, testing=True, seed=42, N_dim=3
             epoch_val_loss /= total_instances_val
             val_losses_cost.append(epoch_val_loss)
 
-            # print(f"Epoch {epoch + 1}/{num_epochs} - Validation Loss: {epoch_val_loss:.4f}")
-
             torch.save(model.state_dict(), last_epoch_model_path)
             scheduler.step()
-            
-            # Early Stopping Check
+
             if epoch_val_loss < best_loss:
                 best_loss = epoch_val_loss
                 early_stopping_counter = 0
                 torch.save(model.state_dict(), best_model_path)
-                # print(f"New best model saved with validation loss: {best_loss:.4f}")
             else:
                 early_stopping_counter += 1
-                # print(f"No improvement in validation loss. Early stopping counter: {early_stopping_counter}/{early_stopping_patience}")
                 if early_stopping_counter >= early_stopping_patience:
                     print("Early stopping triggered.")
                     break
-
-
 
     train_val_end_time = time.time()
     train_val_time_sec = train_val_end_time - train_val_start_time
@@ -192,7 +189,6 @@ def master(config, metrics=True, exportonnx=True, testing=True, seed=42, N_dim=3
         print("Training completed without triggering early stopping.")
 
     if testing:
-        # Load the best model if it exists, otherwise, load the last epoch's model
         if os.path.exists(best_model_path):
             print("Loading the best model from this run.")
             model.load_state_dict(torch.load(best_model_path, map_location=device))
@@ -236,11 +232,9 @@ def master(config, metrics=True, exportonnx=True, testing=True, seed=42, N_dim=3
                 new_metrics_batch_train = ((targets_cost) - (outputs_cost)) / (targets_cost)
                 total_new_metrics_train += new_metrics_batch_train.sum().item()
 
-                # Compute per-instance absolute gaps as percentages
                 new_metrics_abs_batch_train = torch.abs((targets_cost - outputs_cost) / targets_cost) * 100
                 total_new_metrics_abs_train += new_metrics_abs_batch_train.sum().item()
 
-                # Collect per-instance absolute gaps
                 train_abs_gaps.extend(new_metrics_abs_batch_train.cpu().numpy())
 
             train_loss /= total_instances_train
@@ -290,11 +284,9 @@ def master(config, metrics=True, exportonnx=True, testing=True, seed=42, N_dim=3
                 new_metrics_batch = ((targets_cost) - (outputs_cost)) / (targets_cost)
                 total_new_metrics += new_metrics_batch.sum().item()
 
-                # Compute per-instance absolute gaps as percentages
                 new_metrics_abs_batch = torch.abs((targets_cost - outputs_cost) / targets_cost) * 100
                 total_new_metrics_abs += new_metrics_abs_batch.sum().item()
 
-                # Collect per-instance absolute gaps
                 test_abs_gaps.extend(new_metrics_abs_batch.cpu().numpy())
 
             test_loss /= total_instances_test
@@ -315,16 +307,6 @@ def master(config, metrics=True, exportonnx=True, testing=True, seed=42, N_dim=3
             actual_vs_predicted_filename = f'actual_vs_predicted_{num_instances}.csv'
             costs_plot_filename = f'costs_{num_instances}.png'
 
-            # # Save CSV with num_instances
-            # csv_data = [{'actual_costs': a, 'predicted_costs': b} for a, b in zip(actual_costs, predicted_costs)]
-            # with open(actual_vs_predicted_filename, 'w', newline='') as csvfile:
-            #     fieldnames = ['actual_costs', 'predicted_costs']
-            #     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            #     writer.writeheader()
-            #     for row in csv_data:
-            #         writer.writerow(row)
-            # print(f"Actual vs Predicted CSV saved to {actual_vs_predicted_filename}")
-
             plt.figure(figsize=(10, 6))
             plt.scatter(actual_costs, predicted_costs, alpha=0.5, color='red', label='Predicted')
             plt.plot([min_costs, max_costs], [min_costs, max_costs], color='blue', label='Perfect prediction')
@@ -334,7 +316,6 @@ def master(config, metrics=True, exportonnx=True, testing=True, seed=42, N_dim=3
             plt.xlabel('Actual Costs')
             plt.ylabel('Predicted Costs')
             plt.legend()
-            # plt.savefig(costs_plot_filename, dpi=300)
             plt.close()
             print(f"Costs plot saved to {costs_plot_filename}")
 
@@ -366,22 +347,20 @@ def master(config, metrics=True, exportonnx=True, testing=True, seed=42, N_dim=3
         phi_model = model.phi
         rho_model = model.rho
         trained_models_dir = os.getenv('trained_models_dir', '.')
-        
+
         phi_dir = os.path.join(trained_models_dir, "deepsets", mode, "phi", normalization_mode)
         rho_dir = os.path.join(trained_models_dir, "deepsets", mode, "rho", normalization_mode)
-        
+
         os.makedirs(phi_dir, exist_ok=True)
         os.makedirs(rho_dir, exist_ok=True)
-        
+
         phi_onnx_filename = os.path.join(phi_dir, f"{num_instances}.onnx")
         rho_onnx_filename = os.path.join(rho_dir, f"{num_instances}.onnx")
 
-        # Export phi model
         dummy_input_phi = torch.randn(1, N_dim).to(device)
         torch.onnx.export(phi_model, dummy_input_phi, phi_onnx_filename)
         print(f"Phi model ONNX exported to {phi_onnx_filename}")
 
-        # Export rho model
         dummy_input_rho = torch.randn(1, config['latent_space_dimension']).to(device)
         torch.onnx.export(rho_model, dummy_input_rho, rho_onnx_filename)
         print(f"Rho model ONNX exported to {rho_onnx_filename}")
