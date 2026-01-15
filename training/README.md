@@ -82,4 +82,22 @@ Trained models are saved to `trained_models/`. We provide our pre-trained DeepSe
 
 ## Step 3b: Training Graph Transformer
 
-*(Documentation to be added)*
+Training scripts are in `scripts/train_graph_transformer/`. The majority of this code was written by [Doyoung Lee](https://github.com/2dozero).
+
+**HPO (uses [Weights & Biases](https://wandb.ai/)):**
+```bash
+cd scripts/train_graph_transformer
+# Edit submit_pretrain.sh: set BASE_DIR, conda env, SLURM params, and WANDB_API_KEY
+sbatch submit_pretrain.sh   # if using SLURM
+bash submit_pretrain.sh     # if running locally (remove #SBATCH lines first)
+```
+
+**Training (after HPO):**
+```bash
+# Update the best architecture found from HPO in train.py
+# Edit submit_train.sh: set BASE_DIR, conda env, SLURM params
+sbatch submit_train.sh      # if using SLURM
+bash submit_train.sh        # if running locally (remove #SBATCH lines first)
+```
+
+Trained models are saved to `trained_models/`. We provide our pre-trained Graph Transformer models in this folder (requires `git lfs pull`).
