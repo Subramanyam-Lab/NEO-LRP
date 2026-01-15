@@ -62,7 +62,16 @@ class GraphTransformerNetwork(nn.Module):
             nn.Linear(rho_hidden_dim, 1),
             nn.ReLU()
         )
-
+        self.reset_parameters()
+ 
+    def reset_parameters(self):
+        """Initialize weights same as DeepSet architecture"""
+        for module in self.modules():
+            if isinstance(module, nn.Linear):
+                nn.init.xavier_uniform_(module.weight)
+                if module.bias is not None:
+                    nn.init.constant_(module.bias, 0.0)
+                            
     def encode(self, data):
         """
         phi network: Computes embeddings for each node through Transformer layers.
