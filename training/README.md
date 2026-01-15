@@ -53,7 +53,7 @@ Where `<input_path>` is a single `.vrp` file or a directory containing multiple 
 - **scaled**: Euclidean distance scaled by 100, fixed cost of 1000 per route
 - **unscaled**: No scaling, no fixed cost (both zero)
 
-For more details, please refer to Section 5 (Experimental Results and Discussion) in our paper.
+For more details on scaled and unscaled, please refer to Section 5 (Experimental Results and Discussion) in our paper.
 
 **Configuration:** The solver timeout is set to 5 seconds per instance. To modify, change the `timeout_sec` parameter in the `solve_cvrp_vroom()` function call in `labeling/label_generator.py`.
 
