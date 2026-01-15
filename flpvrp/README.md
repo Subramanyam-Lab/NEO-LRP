@@ -2,7 +2,7 @@
 
 This part of the repo implements code related to the **value of location allocation decision ablation study** from our paper. Please refer to the corresponding section in our paper for details on the methodology.
 
-## Step 1: Run Main Solver
+## Step 1: Run Main
 
 Run `main.py` to solve FLP-VRP on benchmark instances of Set P:
 
