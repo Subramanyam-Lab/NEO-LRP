@@ -25,7 +25,7 @@ Then skip to **Step 3** for model training, but you would like to sample and gen
 
 ## Step 1: Data Sampling
 
-We adopt the GVS sampling procedure from [Uchoa et al. (2017)](https://www.sciencedirect.com/science/article/pii/S0377221716306270) and [Queiroga et al.](https://openreview.net/pdf?id=yHiMXKN6nTl). The generator code (`sampling/generator.py`) is taken directly from [CVRPLib webpage](http://vrp.galgos.inf.puc-rio.br/index.php/en/updates) and we make very small modifications to it (please see the data sammpling section of our paper). The script `sampling/gvs_sampling.py` generates the batch file `generation.sh` with all instance configurations.
+We adopt the GVS sampling procedure from [Uchoa et al. (2017)](https://www.sciencedirect.com/science/article/pii/S0377221716306270) and [Queiroga et al.](https://openreview.net/pdf?id=yHiMXKN6nTl). The generator code (`sampling/generator.py`) is taken directly from [CVRPLib webpage](http://vrp.galgos.inf.puc-rio.br/index.php/en/updates) and we make very small modifications to it (please see the data sammpling section of our paper). The script `sampling/gvs_sampling.py` generates the bash file `generation.sh` with all instance configurations.
 
 **Run:**
 ```bash
