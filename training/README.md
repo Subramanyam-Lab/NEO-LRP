@@ -19,7 +19,7 @@ To use them directly, set up Git LFS and pull the files:
 git lfs install
 git lfs pull
 ```
-Then skip to **Step 3** for model training.
+Then skip to **Step 3** for model training, but you would like to sample and generate the label yourself please procced to Step 2
 
 ---
 
