@@ -76,6 +76,8 @@ bash submit.sh          # if running locally (remove #SBATCH lines first)
 
 HPO parameters can be modified in `hpo.py`. Training parameters (num_instances, max_evals, normalization_modes) can be adjusted in `submit.sh`.
 
+Trained models are saved to `trained_models/`. We provide our pre-trained DeepSets models in this folder (requires `git lfs pull`).
+
 ---
 
 ## Step 3b: Training Graph Transformer
