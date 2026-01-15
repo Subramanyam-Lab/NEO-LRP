@@ -1,3 +1,7 @@
+"""
+HPO for DeepSets using DeepHyper package.
+"""
+
 from deephyper.hpo import HpProblem
 from deephyper.evaluator import Evaluator
 from deephyper.hpo import CBO
@@ -32,15 +36,15 @@ surrogate_model = args.surrogate_model
 Problem = HpProblem()
 Problem.add_hyperparameter([4, 6, 8], "latent_space_dimension")
 Problem.add_hyperparameter([2, 3, 4, 5, 6], "num_layers_phi")
-Problem.add_hyperparameter([1], "num_layers_rho")  
-Problem.add_hyperparameter([32, 64, 128, 256, 512, 1024], "neurons_per_layer_phi") 
-Problem.add_hyperparameter([4, 6, 8], "neurons_per_layer_rho") 
+Problem.add_hyperparameter([1], "num_layers_rho")
+Problem.add_hyperparameter([32, 64, 128, 256, 512, 1024], "neurons_per_layer_phi")
+Problem.add_hyperparameter([4, 6, 8], "neurons_per_layer_rho")
 Problem.add_hyperparameter([15, 20], "early_stopping_patience")
-Problem.add_hyperparameter([32], "batch_size") 
+Problem.add_hyperparameter([32], "batch_size")
 Problem.add_hyperparameter([0.001], "learning_rate")
 Problem.add_hyperparameter([50, 100, 200, 400, 600, 800], "num_epochs")
-Problem.add_hyperparameter(['Adam'], "optimizer")  
-Problem.add_hyperparameter(['MSE'], "loss_function")  
+Problem.add_hyperparameter(['Adam'], "optimizer")
+Problem.add_hyperparameter(['MSE'], "loss_function")
 Problem.add_hyperparameter(['relu'], "activation_function")
 
 if __name__ == "__main__":
@@ -48,20 +52,20 @@ if __name__ == "__main__":
     multiprocessing.set_start_method('spawn')
 
     csv_file_name = os.path.join(storage_path_csvs, f'best_config_{surrogate_model}_{mode}_{normalization_mode}.csv')
-    
+
     if os.path.isfile(csv_file_name):
         df = pd.read_csv(csv_file_name)
-        best_row = df.loc[df['objective'].idxmin()]        
+        best_row = df.loc[df['objective'].idxmin()]
         initial_points = [best_row.drop('objective').to_dict()]
     else:
         initial_points = []
-    
+
     evaluator = Evaluator.create(run, method="process", method_kwargs={"num_workers": 4})
 
     search = CBO(problem=Problem, evaluator=evaluator, random_state=42, surrogate_model=surrogate_model, initial_points=initial_points)
 
     results = search.search(max_evals=max_evals_int)
-    
+
     results['objective'] = pd.to_numeric(results['objective'], errors='coerce')
     results = results.dropna(subset=['objective'])
 
