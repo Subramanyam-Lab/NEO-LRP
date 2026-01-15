@@ -1,3 +1,9 @@
+"""
+DeepHyper HPO trial runner for each architecture.
+Executes individual hyperparameter configurations and returns validation loss
+for Bayesian optimization during the search process.
+"""
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
