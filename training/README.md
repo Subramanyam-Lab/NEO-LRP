@@ -10,16 +10,16 @@ This part of the repo provides a three step pipeline for training neural network
 
 ---
 
-> **Note:** We provide pre-sampled and labeled data in `training/data/`:
-> - `training/data/train_val.txt` - Training and validation instances
-> - `training/data/test.txt` - Test instances
->
-> To use them directly, set up Git LFS and pull the files:
-> ```bash
-> git lfs install
-> git lfs pull
-> ```
-> Then skip to **Step 3** for model training.
+**Note:** We provide pre-sampled and labeled data in `training/data/`:
+- `training/data/train_val.txt` - Training and validation instances
+- `training/data/test.txt` - Test instances
+
+To use them directly, set up Git LFS and pull the files:
+```bash
+git lfs install
+git lfs pull
+```
+Then skip to **Step 3** for model training.
 
 ---
 
