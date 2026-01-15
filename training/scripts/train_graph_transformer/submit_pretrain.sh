@@ -1,26 +1,26 @@
 #!/bin/bash
+# SLURM settings (remove these lines if not using SLURM)
 #SBATCH --nodes=1
 #SBATCH --mem=100GB
 #SBATCH --job-name=GT_pretrain
 #SBATCH --output=GT_pretrain_%j.out
 #SBATCH --time=1-00:00:00
 #SBATCH --error=GT_pretrain_%j.err
-#SBATCH --account=azs7266_p_gpu
-#SBATCH --partition=sla-prio
+#SBATCH --account=<your_account>
+#SBATCH --partition=<your_partition>
 #SBATCH --gpus=1
 
 source ~/.bashrc
-conda activate /storage/group/azs7266/default/wzk5140/.conda/envs/hyperopt
-module load gcc
+conda activate <your_conda_env>
 
-BASE_DIR="/storage/group/azs7266/default/wzk5140/NEO-LRP"
+# paths (modify these)
+BASE_DIR="<path_to_NEO-LRP>"
 TRAINING_DIR="${BASE_DIR}/training"
 DATA_DIR="${TRAINING_DIR}/data"
 SCRIPT_DIR="${TRAINING_DIR}/scripts/train_graph_transformer"
 H5_CACHE_DIR="${TRAINING_DIR}/data/h5_cache"
 OUTPUT_DIR="${TRAINING_DIR}/results/graph_transformer"
 
-# data files (same for both scaled and unscaled)
 FILE_PATH_TRAIN_VAL="${DATA_DIR}/train_val.txt"
 FILE_PATH_TEST="${DATA_DIR}/test.txt"
 
@@ -29,8 +29,9 @@ SWEEP_COUNT=50
 num_instances_array=(110000)
 normalization_modes=("cost_over_fi")
 
-export WANDB_API_KEY="66baf9785056b77668f72326e9c9a4f359a4f812"
-# export WANDB_DISABLED="true"  # we can uncomment to disable wandb
+# wandb setup (set your API key or disable)
+export WANDB_API_KEY="<your_wandb_api_key>"
+# export WANDB_DISABLED="true"  # uncomment to disable wandb
 
 total_start=$SECONDS
 
@@ -68,7 +69,7 @@ for MODE in "scaled"; do
             config_start=$SECONDS
             export num_instances="$num_instances"
 
-            /storage/group/azs7266/default/wzk5140/.conda/envs/hyperopt/bin/python pretrain.py
+            python pretrain.py
 
             config_elapsed=$((SECONDS - config_start))
             echo ">>> Finished HPO: mode=$MODE, norm=$normalization_mode, n=$num_instances in ${config_elapsed}s ($(($config_elapsed / 60))m $(($config_elapsed % 60))s)"
