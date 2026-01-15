@@ -1,3 +1,8 @@
+"""
+Training utility functions for Graph Transformer.
+Provides functions for normalization layers.
+"""
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
