@@ -1,11 +1,11 @@
-import sys, random, math, os
+"""
+Code directly taken from https://galgos.inf.puc-rio.br/cvrplib/index.php/en/updates/?/index.php/en/updates
+CVRP instance generator based on GVS (Uchoa et al. 2017) methodology.
+Generates instances with configurable depot positioning, customer distribution,
+demand patterns and route sizes following the XML100 benchmark design.
+"""
 
-# To plot the instance, uncomment the next five lines and the twelve last lines (it deteriorates performance)
-# import matplotlib as mpl
-# if os.environ.get('DISPLAY','') == '':
-#     print('no display found. Using non-interactive Agg backend')
-#     mpl.use('Agg')
-# import matplotlib.pyplot as plt
+import sys, random, math, os
 
 if len(sys.argv) < 8:
     print('Missing arguments:\n\t python generate.py n depotPos custPos demandType avgRouteSize instanceID randSeed')
@@ -53,11 +53,8 @@ if len(sys.argv) < 8:
 def distance(x,y):
     return math.sqrt((x[0] - y[0])**2 + (x[1] - y[1])**2)
 
-# constants
 maxCoord = 100
 decay = 40
-
-# read input argmuments
 n = int(sys.argv[1])
 rootPos = int(sys.argv[2])
 custPos = int(sys.argv[3])
@@ -68,8 +65,6 @@ if demandType > 7:
     print("Demant type out of range!")
     exit(0)
 
-
-# output directory
 output_directory = 'Specify folder where you would like to save the sampled data'  
 if not os.path.exists(output_directory):
     os.makedirs(output_directory)
@@ -85,15 +80,13 @@ if avgRouteSize > 6:
     exit(0)	
 r = random.uniform(In[avgRouteSize][0], In[avgRouteSize][1])
 
-# change '02d' if you need more than two digits (e.g. with '03d' you can index from 001 to 999) 
 instanceName = 'XML'+str(n)+'_'+str(rootPos)+str(custPos)+str(demandType)+str(avgRouteSize)+'_'+ format(instanceID, '02d')
 pathToWrite = os.path.join(output_directory, f'{instanceName}.vrp')
 
-depot = (-1,-1) # depot position
-S = set() # set of coordinates for the customers
+depot = (-1,-1)
+S = set()
 
 x_,y_ = (-1,-1)
-#Root positioning
 if rootPos == 1:
     x_ = random.randint(0,maxCoord)
     y_ = random.randint(0,maxCoord)
@@ -106,7 +99,6 @@ else:
     exit(0)
 depot = (x_,y_)
 
-#Customer positioning
 nRandCust = -1
 if custPos == 3:
     nRandCust = int(n/2.0)
@@ -121,7 +113,6 @@ else:
 
 nClustCust = n - nRandCust
 
-#Generating random customers
 for i in range(1, nRandCust+1):
     x_ = random.randint(0,maxCoord)
     y_ = random.randint(0,maxCoord)
@@ -133,13 +124,11 @@ for i in range(1, nRandCust+1):
 nS = nRandCust
 
 seeds = []
-# Generation of the clustered customers
 if nClustCust > 0:
     if nClustCust < nSeeds:
         print("Too many seeds!")
         exit(0)
-    
-    #Generate the seeds
+
     for i in range(nSeeds):
         x_ = random.randint(0,maxCoord)
         y_ = random.randint(0,maxCoord)
@@ -149,8 +138,7 @@ if nClustCust > 0:
         S.add((x_,y_))
         seeds.append((x_,y_))
     nS = nS + nSeeds
-    
-    # Determine the seed with maximum sum of weights (w.r.t. all seeds)
+
     maxWeight = 0.0
     for i,j in seeds:
         w_ij = 0.0
@@ -161,7 +149,6 @@ if nClustCust > 0:
 
     norm_factor = 1.0/maxWeight
 
-    # Generate the remaining customers using Accept-reject method
     while nS < n:
         x_ = random.randint(0,maxCoord)
         y_ = random.randint(0,maxCoord)
@@ -175,13 +162,13 @@ if nClustCust > 0:
         weight *= norm_factor
         rand = random.uniform(0,1)
 
-        if rand <= weight: # Will we accept the customer?
+        if rand <= weight:
             S.add((x_,y_))
             nS = nS + 1
 
-V = [depot] + list(S) # set of vertices (from now on, the ids are defined)
+V = [depot] + list(S)
 
-# Demands
+
 demandMinValues = [1,1,5,1,50,1,51,50,1]
 demandMaxValues = [1,10,10,100,100,50,100,100,10]
 demandMin = demandMinValues[demandType-1]
@@ -194,7 +181,7 @@ largePerRoute = 1.5
 demandMinSmall = 1
 demandMaxSmall = 10
 
-D = [] # demands
+D = []
 sumDemands = 0
 maxDemand = 0
 
@@ -213,7 +200,6 @@ for i in range(2,n + 2):
         maxDemand = j
     sumDemands = sumDemands + j
 
-# Generate capacity
 capacity = -1
 if sumDemands == n:
     capacity = math.floor(r)
