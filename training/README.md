@@ -31,10 +31,10 @@ We adopt the GVS sampling procedure from [Uchoa et al. (2017)](https://www.scien
 ```bash
 # 1. Set output_directory in sampling/generator.py to your desired path
 # 2. Generate the batch script
-> cd sampling
-> python gvs_sampling.py
+cd sampling
+python gvs_sampling.py
 # 3. Run generation
-> bash generation.sh
+bash generation.sh
 ```
 
 ---
