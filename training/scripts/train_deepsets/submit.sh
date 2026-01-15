@@ -1,25 +1,25 @@
 #!/bin/bash
+# SLURM settings (remove these lines if not using SLURM)
 #SBATCH --nodes=1
 #SBATCH --mem=100GB
 #SBATCH --job-name=DS_deepsets
 #SBATCH --output=DS_deepsets_%j.out
 #SBATCH --time=2-00:00:00
 #SBATCH --error=DS_deepsets_%j.err
-#SBATCH --account=azs7266_p_gpu
-#SBATCH --partition=sla-prio
+#SBATCH --account=<your_account>
+#SBATCH --partition=<your_partition>
 #SBATCH --gpus=1
 
 source ~/.bashrc
-conda activate /storage/group/azs7266/default/wzk5140/.conda/envs/hyperopt
-module load gcc
+conda activate <your_conda_env>
 
-BASE_DIR="/storage/group/azs7266/default/wzk5140/NEO-LRP"
+# paths (modify these correctly)
+BASE_DIR="<path_to_NEO-LRP>"
 TRAINING_DIR="${BASE_DIR}/training"
 DATA_DIR="${TRAINING_DIR}/data"
 SCRIPT_DIR="${TRAINING_DIR}/scripts/train_deepsets"
 TRAINED_MODELS_DIR="${BASE_DIR}/trained_models"
 
-# data files (same for both scaled and unscaled)
 FILE_PATH_TRAIN_VAL="${DATA_DIR}/train_val.txt"
 FILE_PATH_TEST="${DATA_DIR}/test.txt"
 
@@ -76,7 +76,7 @@ for MODE in "scaled" "unscaled"; do
 
             config_start=$SECONDS
 
-            /storage/group/azs7266/default/wzk5140/.conda/envs/hyperopt/bin/python hpo.py --surrogate_model GP
+            python hpo.py --surrogate_model GP
 
             config_elapsed=$((SECONDS - config_start))
             echo ">>> Finished: mode=$MODE, norm=$normalization_mode, n=$num_instances in ${config_elapsed}s ($(($config_elapsed / 60))m $(($config_elapsed % 60))s)"
