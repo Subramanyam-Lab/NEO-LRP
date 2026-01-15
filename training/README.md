@@ -82,7 +82,7 @@ Trained models are saved to `trained_models/`. We provide our pre-trained DeepSe
 
 ## Step 3b: Training Graph Transformer
 
-Training scripts are in `scripts/train_graph_transformer/`. The majority of this code was written by [Doyoung Lee](https://github.com/2dozero).
+Training scripts are in `scripts/train_graph_transformer/`. The majority of this code was written by [Doyoung Lee](https://github.com/2dozero) and edited and formatted by [Waquar Kaleem](https://github.com/theSubsurfaceGuy).
 
 **HPO (uses [Weights & Biases](https://wandb.ai/)):**
 ```bash
