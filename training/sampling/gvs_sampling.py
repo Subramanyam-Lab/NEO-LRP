@@ -1,13 +1,18 @@
+"""
+Generates bash script to create 200K CVRP training instances.
+Systematically varies depot positions, customer distributions, demand patterns,
+route sizes, and instance sizes to create diverse training data.
+"""
+
 import os
 
-# Configuration
-depot_positions = [1, 2, 3]            # 1=Random, 2=Centered, 3=Cornered
-customer_positions = [1, 2, 3]         # 1=Random, 2=Clustered, 3=Random-clustered
-demand_types = [1, 2, 3, 4, 5, 6, 7]   # Various demand distributions
-avg_route_sizes = [1, 2, 3, 4, 5, 6]   # From very short to ultra long
-customer_sizes = list(range(5, 101, 5))  # 5, 10, 15,..., 100
+depot_positions = [1, 2, 3]
+customer_positions = [1, 2, 3]
+demand_types = [1, 2, 3, 4, 5, 6, 7]
+avg_route_sizes = [1, 2, 3, 4, 5, 6]
+customer_sizes = list(range(5, 101, 5))
 
-total_instances = 200000  # We sample more here but later use only 120k
+total_instances = 200000
 
 configurations_count = (
     len(customer_sizes) * len(depot_positions) *
@@ -16,11 +21,10 @@ configurations_count = (
 )
 
 instances_per_config = total_instances // configurations_count
-extra_instances = total_instances % configurations_count  # remainder to distribute
+extra_instances = total_instances % configurations_count
 
 with open("generation.sh", "w") as bash_script:
     bash_script.write("#!/bin/bash\n\n")
-    bash_script.write("# Auto-generated script to run VRP instance generation\n")
 
     instance_id = 1
     rand_seed = 1
