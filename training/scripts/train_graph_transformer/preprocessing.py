@@ -1,3 +1,9 @@
+"""
+Data preprocessing for Graph Transformer training.
+Parses CVRP instance files, normalizes coordinates and costs, handles graph construction,
+and exports to HDF5 format for PyTorch Geometric.
+"""
+
 import os
 import random
 import numpy as np
@@ -7,8 +13,8 @@ import re
 import json
 import h5py
 
-DEPOT_INDICATOR = True 
-HB5_EXPORT      = True 
+DEPOT_INDICATOR = True
+HB5_EXPORT      = True
 PADDING         = False
 
 print("Using updated data preprocessing updated...")
