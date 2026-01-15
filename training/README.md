@@ -1,32 +1,25 @@
-# Training Instructions
+# Instructions
 
 This part of the repo provides a three step pipeline for training neural network models to predict CVRP routing costs:
 
 1. **Data Sampling** - Generate synthetic CVRP instances
 2. **Label Generation** - Solve instances to obtain routing costs labels
 3. **Model Training**
-   - 3A: DeepSets architecture
-   - 3B: Graph Transformer architecture
+   - a: DeepSets architecture
+   - b: Graph Transformer architecture
 
 ---
 
-## Prerequisites
-
-### Git LFS Setup
-
-This repository uses Git LFS for large data files. To access the pre-generated training data:
-
-```bash
-# Install Git LFS (if not already installed)
-git lfs install
-
-# Pull the LFS files
-git lfs pull
-```
-
-The following data files are tracked via Git LFS:
-- `training/data/train_val.txt` (~348 MB) - Training and validation instances
-- `training/data/test.txt` (~32 MB) - Test instances
+> **Note:** We provide pre-sampled and labeled data in `training/data/`:
+> - `training/data/train_val.txt` - Training and validation instances
+> - `training/data/test.txt` - Test instances
+>
+> To use them directly, set up Git LFS and pull the files:
+> ```bash
+> git lfs install
+> git lfs pull
+> ```
+> Then skip to **Step 3** for model training.
 
 ---
 
