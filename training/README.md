@@ -41,70 +41,25 @@ bash generation.sh
 
 ## Step 2: Label Generation
 
-### Overview
+The label generator uses [VROOM](https://github.com/VROOM-Project/vroom) solver to compute routing costs for each CVRP instance from Step 1. Solutions are appended directly to the instance files.
 
-The label generator uses the [VROOM](https://github.com/VROOM-Project/vroom) solver to compute routing costs for each CVRP instance. Solutions are appended directly to the instance files.
-
-### Files
-
-| File | Description |
-|------|-------------|
-| `labeling/label_generator.py` | VROOM-based CVRP solver and label appender |
-
-### Usage
-
+**Run:**
 ```bash
 cd labeling
 python label_generator.py <input_path> --mode <scaled|unscaled>
 ```
+Where `<input_path>` is a single `.vrp` file or a directory containing multiple `.vrp` files from Step 1.
 
-| Argument | Description |
-|----------|-------------|
-| `input_path` | Path to a single instance file OR a directory containing multiple `.vrp` files |
-| `--mode` | `scaled` (Prodhon-style, coordinates multiplied by 100) or `unscaled` (Barreto/Tuzun-style) |
+- **scaled**: Euclidean distance scaled by 100, fixed cost of 1000 per route
+- **unscaled**: No scaling, no fixed cost (both zero)
 
-### Examples
+For more details, please refer to Section 5 (Experimental Results and Discussion) in our paper.
 
-```bash
-# Solve a single instance (scaled mode)
-python label_generator.py /path/to/instance.vrp --mode scaled
+**Configuration:** The solver timeout is set to 5 seconds per instance. To modify, change the `timeout_sec` parameter in the `solve_cvrp_vroom()` function call in `labeling/label_generator.py`.
 
-# Solve all instances in a directory (unscaled mode)
-python label_generator.py /path/to/sampled_data/ --mode unscaled
-```
+**Concatenate:** After labeling, concatenate files into training and test sets. We use 110K instances for `train_val.txt` and 10K for `test.txt`:
 
-### Configuration
-
-- **Time limit**: The solver timeout is set to 5 seconds per instance by default. To modify, change the `timeout_sec` parameter in the `solve_cvrp_vroom()` function call within `label_generator.py`.
-
-- **Scaled vs Unscaled modes**:
-  | Mode | Scale Factor | Fixed Vehicle Cost | Use Case |
-  |------|--------------|-------------------|----------|
-  | `scaled` | 100 | 1000 | Prodhon benchmark style |
-  | `unscaled` | 1 | 0 | Barreto/Tuzun benchmark style |
-
-### Output Format
-
-After solving, the following metadata is appended to each instance file:
-```
-#cost_vroom_<mode> <total_cost>
-#num_routes_vroom_<mode> <number_of_vehicles_used>
-#solve_time_vroom_<mode> <solve_time>s
-#actual_routes_vroom_<mode> <route_details>
-#EOF
-```
-
-### Concatenating Instances
-
-After all instances are solved, concatenate them into a single file for training:
-
-```bash
-# Concatenate all solved instances into training file
-cat /path/to/instances/*.vrp > train_val.txt
-
-# Or split into train/val and test sets as needed
-# (ensure proper shuffling and splitting)
-```
+The pre-generated data files we provide in `training/data/` follow this split.
 
 ---
 
