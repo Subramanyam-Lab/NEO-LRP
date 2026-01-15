@@ -25,61 +25,17 @@ Then skip to **Step 3** for model training, but you would like to sample and gen
 
 ## Step 1: Data Sampling
 
-### Overview
+We adopt the GVS sampling procedure from [Uchoa et al. (2017)](https://www.sciencedirect.com/science/article/pii/S0377221716306270) and [Queiroga et al.](https://openreview.net/pdf?id=yHiMXKN6nTl). The generator code (`sampling/generator.py`) is taken directly from [CVRPLIB](https://galgos.inf.puc-rio.br/cvrplib/). The script `sampling/gvs_sampling.py` generates the batch file `generation.sh` with all instance configurations.
 
-The instance generator follows the GVS (Uchoa et al. 2017) methodology for creating diverse CVRP benchmark instances. The generation code is adapted from the [CVRPLIB XML100 dataset](http://vrp.galgos.inf.puc-rio.br/index.php/en/).
-
-**Reference:**
-> Uchoa et al. (2017). *New benchmark instances for the Capacitated Vehicle Routing Problem.* European Journal of Operational Research.
-
-### Files
-
-| File | Description |
-|------|-------------|
-| `sampling/generator.py` | Core instance generator (GVS methodology) |
-| `sampling/gvs_sampling.py` | Script to generate `generation.sh` with all configurations |
-| `sampling/generation.sh` | Generated bash script containing all instance generation commands |
-
-### Configuration Options
-
-The generator accepts the following arguments:
-
+**Run:**
+```bash
+# 1. Set output_directory in sampling/generator.py to your desired path
+# 2. Generate the batch script
+cd sampling
+python gvs_sampling.py
+# 3. Run generation
+bash generation.sh
 ```
-python generator.py n depotPos custPos demandType avgRouteSize instanceID randSeed
-```
-
-| Argument | Options | Description |
-|----------|---------|-------------|
-| `n` | Integer | Number of customers |
-| `depotPos` | 1=Random, 2=Centered, 3=Cornered | Depot positioning |
-| `custPos` | 1=Random, 2=Clustered, 3=Random-clustered | Customer positioning |
-| `demandType` | 1-7 | Demand distribution pattern |
-| `avgRouteSize` | 1=Very short, 2=Short, 3=Medium, 4=Long, 5=Very long, 6=Ultra long | Average route size |
-| `instanceID` | Integer | Instance identifier |
-| `randSeed` | Integer | Random seed for reproducibility |
-
-### Usage
-
-1. **Set the output directory** in `sampling/generator.py`:
-   ```python
-   output_directory = 'Specify folder where you would like to save the sampled data'
-   ```
-   Change this to your desired path, e.g.:
-   ```python
-   output_directory = '/path/to/where/you/want/to/store'
-   ```
-
-2. **Generate the batch script** (creates `generation.sh` instance configurations):
-   ```bash
-   cd sampling
-   python gvs_sampling.py
-   ```
-
-3. **Run the generation script**:
-   ```bash
-   bash generation.sh
-   ```
-   This will generate CVRP instances in `.vrp` format in the specified output directory.
 
 ---
 
