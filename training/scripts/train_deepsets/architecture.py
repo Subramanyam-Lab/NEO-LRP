@@ -1,3 +1,8 @@
+"""
+DeepSets architecture. Implements phi (per-element encoder) and rho (aggregation decoder) networks
+to predict routing costs.
+"""
+
 import torch
 import torch.nn as nn
 
@@ -6,8 +11,7 @@ class DeepSetArchitecture(nn.Module):
         super(DeepSetArchitecture, self).__init__()
         self.N_dim = N_dim
         self.config = config
-        activation_functions = {'relu': nn.ReLU, 'sigmoid': nn.Sigmoid, 'tanh': nn.Tanh, 'LeakyReLU': nn.LeakyReLU}
- 
+
         layers_phi = []
         layers_phi.append(nn.Linear(N_dim, config['neurons_per_layer_phi']))
         layers_phi.append(self.get_activation_function(config['activation_function']))
@@ -47,26 +51,19 @@ class DeepSetArchitecture(nn.Module):
 
     def forward(self, inputs: torch.Tensor):
         batch_size, num_customers, num_features = inputs.size()
-        
-        # create a mask indicating valid entries (batch_size, num_customers)
+
         mask = (inputs[:, :, 0] != -1.0e+04).float()
-        
-        # flatten inputs to apply phi to all customer features at once
+
         inputs_flat = inputs.view(-1, num_features)
-        
-        # apply phi to all inputs
+
         x = self.phi(inputs_flat)
-        
-        # reshape phi outputs back to batch structure
+
         x = x.view(batch_size, num_customers, -1)
-        
-        # apply mask to zero out phi outputs for padded entries
+
         x = x * mask.unsqueeze(-1)
-        
-        # sum over customers
+
         summed_tensor = x.sum(dim=1)
-        
-        # pass through rho
+
         x = self.rho(summed_tensor)
         cost = x.squeeze(-1)
         return cost
