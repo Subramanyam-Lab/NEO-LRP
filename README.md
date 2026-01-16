@@ -95,6 +95,30 @@ pip install -r requirements.txt
 
 ## Running NEO-LRP
 
+> [!TIP]
+> **Using Pre-trained Models on Your Own Benchmarks**
+>
+> You can directly apply our pre-trained models to new LRP instances without retraining:
+>
+> 1. **Determine your problem type:**
+>    - **Scaled**: Distances are `int(100 * euclidean_distance)` and fixed route cost = 1000 → use `scaled` models
+>    - **Unscaled**: Distances are floats (no scaling) and no fixed route cost → use `unscaled` models
+>
+> 2. **Add your benchmark:**
+>    - Place instance files in `benchmark_instances/H_hypothetical/`
+>    - Create config `neo-lrp/configs/H_hypothetical.json` (copy from existing config)
+>    - Add BKS values to `neo-lrp/configs/BKS/H_hypothetical.json` (if available)
+>
+> 3. **Run:**
+>    ```bash
+>    # For scaled instances (like P_prodhon, S_schneider)
+>    python run.py --dataset H_hypothetical --normalization cost_over_fi --N 110000 --solver vroom --model_type deepsets --num_runs 1
+>
+>    # For unscaled instances (like T_tuzun, B_barreto)
+>    python run.py --dataset H_hypothetical --normalization cost_over_fi --N 110000 --solver vroom --model_type deepsets --num_runs 1
+>    ```
+>    The code automatically selects scaled/unscaled models based on your config.
+
 ### Arguments
 
 | Argument | Options | Description |
