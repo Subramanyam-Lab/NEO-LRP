@@ -1,5 +1,10 @@
 # Neural Embedded Optimization for Location-Routing Problems
 
+[![arXiv](https://img.shields.io/badge/arXiv-2412.05665-b31b1b.svg)](https://arxiv.org/abs/2412.05665)
+[![Paper](https://img.shields.io/badge/IISE_2024-Paper-blue.svg)](https://drive.google.com/file/d/12TlysoLStWExp3q76sj4FWRbQJpa7LKM/view)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.9-blue.svg)]()
+
 This repository contains the implementation, datasets, pre-trained models, and training data for the Neural Embedded Optimization approach for solving Location-Routing Problems. We provide everything needed to reproduce our results: benchmark instances, pre-trained neural networks, data sampling and label generation scripts, and training code.
 
 **Naming Convention:** We refer to our approach as **NEO-LRP**. In the paper and codebase:
@@ -224,10 +229,17 @@ After running NEO-LRP on all benchmarks, see [`utils/tables_and_figures/README.m
 
 ## Citation
 
-If you use our pre-trained models or code, please cite:
+If you find this repository helpful, use our pre-trained models, code, or training data in your research, or work on similar problems, we would appreciate a citation to our papers:
 
 ```bibtex
-@inproceedings{kaleem2024neural,
+@article{kaleem2024neural,
+  title={Neural Embedded Mixed-Integer Optimization for Location-Routing Problems},
+  author={Kaleem, Waquar and Subramanyam, Anirudh},
+  journal={arXiv preprint arXiv:2412.05665},
+  year={2024}
+}
+
+@inproceedings{kaleem2024neuraliise,
   title={Neural Embedded Optimization for Integrated Location and Routing Problems},
   author={Kaleem, Waquar and Ayala, Harshita and Subramanyam, Anirudh},
   booktitle={IISE Annual Conference. Proceedings},
@@ -235,13 +247,8 @@ If you use our pre-trained models or code, please cite:
   year={2024},
   organization={Institute of Industrial and Systems Engineers (IISE)}
 }
-
-@article{kaleem2024neural,
-  title={Neural Embedded Mixed-Integer Optimization for Location-Routing Problems},
-  author={Kaleem, Waquar and Subramanyam, Anirudh},
-  journal={arXiv preprint arXiv:2412.05665},
-  year={2024}
-}
 ```
+
+If you find this work useful, consider giving the repository a ⭐!
 
 For questions and support, please open an issue in the repository.
