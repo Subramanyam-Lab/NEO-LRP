@@ -1,7 +1,7 @@
 # Neural Embedded Optimization for Location-Routing Problems
 
 [![arXiv](https://img.shields.io/badge/arXiv-2412.05665-b31b1b.svg)](https://arxiv.org/abs/2412.05665)
-[![Paper](https://img.shields.io/badge/IISE_2024-Paper-blue.svg)](https://drive.google.com/file/d/12TlysoLStWExp3q76sj4FWRbQJpa7LKM/view)
+[![IISE preliminary](https://img.shields.io/badge/Preliminary-Paper-blue.svg)](https://drive.google.com/file/d/12TlysoLStWExp3q76sj4FWRbQJpa7LKM/view)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.9-blue.svg)]()
 
