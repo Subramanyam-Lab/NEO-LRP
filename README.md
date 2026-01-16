@@ -96,8 +96,6 @@ conda activate neo_lrp
 pip install -r requirements.txt
 ```
 
-4. **(Optional) VRPSolverEasy**: If using `--solver vrpeasy`, you need to install the BaPCod binaries separately. Follow instructions at: https://github.com/inria-UFF/VRPSolverEasy
-
 ---
 
 ## Running NEO-LRP
@@ -113,6 +111,8 @@ pip install -r requirements.txt
 | `--model_type` | `deepsets`, `graph_transformer` | Trained neural network architecture |
 | `--num_runs` | Integer >= 1 | Number of runs per instance |
 | `--instance` | (optional) | Single instance filename |
+
+If using `--solver vrpeasy`, you need to install the BaPCod binaries separately. Follow instructions at: https://github.com/inria-UFF/VRPSolverEasy
 
 ### Using Python
 
