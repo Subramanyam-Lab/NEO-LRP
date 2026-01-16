@@ -151,28 +151,16 @@ Results are saved to `neo-lrp/output/<DATASET>/`:
 - **Solution JSONs**: `<model_type>_<solver>_<normalization>_<N>/<instance>/run_<i>.json`
 - **Excel summary**: `<DATASET>_<model_type>_<N>_<normalization>_<solver>.xlsx`
 
-### Combining Array Job Results
+### Utilities
 
+**Combine array job results:**
 ```bash
-python combine_results.py \
-    --dataset S_schneider \
-    --normalization cost_over_fi \
-    --N 110000 \
-    --solver vroom \
-    --model_type deepsets \
-    --instances_file configs/schneider_instances.txt \
-    --delete_temp
+python combine_results.py --dataset S_schneider --normalization cost_over_fi --N 110000 --solver vroom --model_type deepsets --instances_file configs/schneider_instances.txt --delete_temp
 ```
 
-### Verifying Solutions
-
+**Verify solutions:**
 ```bash
-python verify_solutions.py \
-    --dataset P_prodhon \
-    --model_type deepsets \
-    --solver vroom \
-    --normalization cost_over_fi \
-    --N 110000
+python verify_solutions.py --dataset P_prodhon --model_type deepsets --solver vroom --normalization cost_over_fi --N 110000
 ```
 
 ---
