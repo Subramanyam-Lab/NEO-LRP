@@ -2,6 +2,10 @@
 
 This repository contains the implementation and datasets for the Neural Embedded Optimization approach for solving Location-Routing Problems.
 
+**Naming Convention:** We refer to our approach as **NEO-LRP**. In the paper and codebase:
+- **NEO-DS** = NEO-LRP using DeepSets surrogate
+- **NEO-GT** = NEO-LRP using Graph Transformer surrogate
+
 ## Table of Contents
 - [Repository Structure](#repository-structure)
 - [Installation](#installation)
@@ -45,7 +49,7 @@ NEO-LRP/
 │   │   └── BKS/                    # Best Known Solutions
 │   └── core/                       # Core modules
 │       ├── dataparse.py            # Data parsing utilities
-│       ├── lrp_model.py            # Neural embedded LRP model (Gurobi-ML)
+│       ├── lrp_model.py            # Neural embedded LRP model
 │       ├── network_ds.py           # DeepSets network wrapper
 │       ├── network_gt.py           # Graph Transformer network wrapper
 │       └── solver.py               # CVRP solvers (VROOM, ORTools, VRPSolverEasy)
@@ -87,8 +91,6 @@ conda activate neo_lrp
 pip install -r requirements.txt
 ```
 
-**Required packages:** torch, gurobipy, gurobi-ml, onnx, onnx2torch, vroom, ortools, VRPSolverEasy, pandas, numpy, torch_geometric
-
 ---
 
 ## Running NEO-LRP
@@ -98,16 +100,12 @@ pip install -r requirements.txt
 | Argument | Options | Description |
 |----------|---------|-------------|
 | `--dataset` | `P_prodhon`, `S_schneider`, `T_tuzun`, `B_barreto` | Benchmark dataset |
-| `--normalization` | `raw`, `minmax`, `cost_over_fi`, `cost_over_fi_minmax` | Cost normalization mode |
-| `--N` | `110`, `1100`, `11000`, `110000` | Training instances count (model variant) |
+| `--normalization` | `raw`, `minmax`, `cost_over_fi`, `cost_over_fi_minmax` | Use model trained with this target normalization |
+| `--N` | `110`, `1100`, `11000`, `110000` | Use model trained on N instances |
 | `--solver` | `vroom`, `ortools`, `vrpeasy` | VRP solver for route computation |
 | `--model_type` | `deepsets`, `graph_transformer` | Neural network architecture |
 | `--num_runs` | Integer >= 1 | Number of runs per instance |
 | `--instance` | (optional) | Single instance filename |
-
-**Dataset Notes:**
-- **Scaled datasets** (`P_prodhon`, `S_schneider`): Use `int(100 * distance)` and fixed route cost of 1000
-- **Unscaled datasets** (`T_tuzun`, `B_barreto`): Use float distances and no fixed route cost
 
 ### Using SLURM
 
