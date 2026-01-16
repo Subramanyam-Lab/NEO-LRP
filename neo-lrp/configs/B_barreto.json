@@ -1,0 +1,16 @@
+{
+    "name": "B_barreto",
+    "data_format": "dat",
+    "normalization_file": "label_range_unscaled.json",
+    "normalization_keys": {
+        "minmax_min": "minmax_min_vroom_unscaled",
+        "minmax_max": "minmax_max_vroom_unscaled",
+        "cost_over_fi_minmax_min": "cost_over_fi_minmax_min_vroom_unscaled",
+        "cost_over_fi_minmax_max": "cost_over_fi_minmax_max_vroom_unscaled"
+    },
+    "solver_timeout": 60,
+    "vroom_timeout": 5,
+    "ortools_timeout": 5,
+    "vrpeasy_timeout": 3600,
+    "extra_normalization_modes": []
+}
