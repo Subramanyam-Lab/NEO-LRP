@@ -107,6 +107,27 @@ pip install -r requirements.txt
 | `--num_runs` | Integer >= 1 | Number of runs per instance |
 | `--instance` | (optional) | Single instance filename |
 
+### Using Python
+
+```bash
+cd neo-lrp
+
+# All instances in a dataset
+python run.py --dataset P_prodhon --normalization cost_over_fi --N 110000 --solver vroom --model_type deepsets --num_runs 5
+
+# Single instance
+python run.py --dataset S_schneider --instance 100-5-1a.json --normalization cost_over_fi --N 110000 --solver vroom --model_type deepsets --num_runs 1
+```
+
+### Using Bash
+
+Edit `submit.sh` to set `BASE_DIR` and conda environment, then remove or comment out `#SBATCH` lines:
+
+```bash
+cd neo-lrp
+bash submit.sh P_prodhon cost_over_fi 110000 vroom deepsets 5
+```
+
 ### Using SLURM
 
 ```bash
@@ -122,26 +143,6 @@ sbatch --job-name=prodhon_gt submit.sh P_prodhon cost_over_fi 110000 vroom graph
 
 # Array jobs for large datasets (e.g., Schneider with 203 instances)
 sbatch --job-name=schneider_ds --array=1-203 submit.sh S_schneider cost_over_fi 110000 vroom deepsets 1 configs/schneider_instances.txt
-```
-
-### Using Bash (without SLURM)
-
-Remove or comment out `#SBATCH` lines in `submit.sh`, then:
-
-```bash
-bash submit.sh P_prodhon cost_over_fi 110000 vroom deepsets 5
-```
-
-Or run directly with Python:
-
-```bash
-cd neo-lrp
-
-# All instances in a dataset
-python run.py --dataset P_prodhon --normalization cost_over_fi --N 110000 --solver vroom --model_type deepsets --num_runs 5
-
-# Single instance
-python run.py --dataset S_schneider --instance 100-5-1a.json --normalization cost_over_fi --N 110000 --solver vroom --model_type deepsets --num_runs 1
 ```
 
 ### Output
