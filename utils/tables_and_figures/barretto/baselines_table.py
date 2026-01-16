@@ -1,6 +1,5 @@
 """
-generate latex table comparing neo-ds against state-of-the-art heuristics
-(hcc-500k, tsba_speed, grasp/vns) on the barreto benchmark. reads neo-ds
+Generate ECDF plots comparing NEO-DS against baseline methods (hcc-500k, tsba_speed, grasp/vns) on the barreto benchmark. reads neo-ds
 results from excel and merges them into a pre-defined latex template with
 computed averages for all methods.
 """
