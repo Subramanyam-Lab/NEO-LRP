@@ -13,7 +13,7 @@ def normalize_instance(name: str) -> str:
     return name.replace(".json", "").strip()
 
 
-excel_ds = "/storage/group/azs7266/default/wzk5140/NEO-LRP/neo-lrp/output/S_schneider/S_schneider_deepsets_110000_cost_over_fi_vroom.xlsx"
+excel_ds = "NEO-LRP/neo-lrp/output/S_schneider/S_schneider_deepsets_110000_cost_over_fi_vroom.xlsx"
 
 print("\nLoading NEO-DS Excel")
 df_ds = pd.read_excel(excel_ds, sheet_name="results", header=0)
@@ -378,4 +378,14 @@ with open("sota_schneider_500_600.tex", "w") as f:
     f.write(table_500_600)
 print("Wrote: sota_schneider_500_600.tex")
 
-print("\nDone! Generated 3 separate latex tables.")
+table_all = generate_table(
+    all_rows,
+    r"Detailed results on the $\mathbb{S}$ benchmark of \citet{schneider2019large} (all instances). BKS values are taken from \citet{he2025hybrid}.",
+    "tab:setS-all"
+)
+
+with open("sota_schneider_all.tex", "w") as f:
+    f.write(table_all)
+print("Wrote: sota_schneider_all.tex")
+
+print("\nDone! Generated 4 separate latex tables.")
