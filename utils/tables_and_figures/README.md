@@ -4,7 +4,7 @@ This directory contains code to generate all plots and figures presented in our 
 
 ## Prerequisites
 
-- Ensure you have run NEO-LRP on all benchmarks first, as these scripts require the Excel result files.
+- Ensure you have run NEO-DS on all benchmarks first along with NEO-GT on prodhon benchmark, as these scripts require the Excel result files.
 - A LaTeX distribution (e.g., TeX Live) is required for generating figures with LaTeX-rendered text.
 
 ## Comparison with Baselines
