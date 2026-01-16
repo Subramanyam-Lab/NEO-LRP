@@ -3,7 +3,7 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2412.05665-b31b1b.svg)](https://arxiv.org/abs/2412.05665)
 [![IISE preliminary](https://img.shields.io/badge/Preliminary-Paper-blue.svg)](https://drive.google.com/file/d/12TlysoLStWExp3q76sj4FWRbQJpa7LKM/view)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.9-blue.svg)]()
+[![Python](https://img.shields.io/badge/Python-3.11-blue.svg)]()
 
 This repository contains the implementation, datasets, pre-trained models, and training data for the Neural Embedded Optimization approach for solving Location-Routing Problems. We provide everything needed to reproduce our results: benchmark instances, pre-trained neural networks, data sampling and label generation scripts, and training code.
 
@@ -91,10 +91,11 @@ git lfs pull
 
 3. **Create Conda Environment**
 ```bash
-conda create --name neo_lrp python=3.9
-conda activate neo_lrp
+conda create --name neolrp python=3.11
+conda activate neolrp
 pip install -r requirements.txt
 ```
+> **Note for macOS users:** If you encounter version conflicts, some packages (like `torch` and `ortools`) have different available versions on macOS vs Linux. Use `python -m pip install -r requirements.txt` to ensure packages install to the correct environment.
 
 ---
 
