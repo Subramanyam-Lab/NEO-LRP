@@ -1,6 +1,6 @@
 # Instructions
 
-This directory contains code to generate all plots and figures presented in our paper.
+This part of the repo contains code to generate all plots and figures presented in our paper.
 
 ## Prerequisites
 
