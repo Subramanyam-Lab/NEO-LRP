@@ -46,7 +46,7 @@ NEO-LRP/
 │   ├── configs/                    # Dataset configs and BKS values
 │   │   ├── {P_prodhon,S_schneider,T_tuzun,B_barreto}.json
 │   │   ├── schneider_instances.txt
-│   │   └── BKS/                    # Best Known Solutions
+│   │   └── BKS/                    # Best Known Solutions (from the literature)
 │   └── core/                       # Core modules
 │       ├── dataparse.py            # Data parsing utilities
 │       ├── lrp_model.py            # Neural embedded LRP model
