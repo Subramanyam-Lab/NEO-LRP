@@ -97,7 +97,7 @@ pip install -r requirements.txt
 ```
 > **Some Notes**
 > - For macOS users: If you encounter version conflicts, some packages (like `torch` and `ortools`) have different available versions on macOS vs Linux. Use `python -m pip install -r requirements.txt` to ensure packages install to the correct environment.
-> - In our current implementation we use Gurobi-ML package to write the neural network constraints and solve the model using Gurobi and so a license is required and you can get one from [Gurobi Academic Program](https://www.gurobi.com/academia/academic-program-and-licenses/).
+> - In our current implementation we use [Gurobi-ML](https://gurobi-machinelearning.readthedocs.io/en/stable/) package to write the neural network constraints and solve the model using Gurobi and so a license is required and you can get one from [Gurobi Academic Program](https://www.gurobi.com/academia/academic-program-and-licenses/).
 
 ---
 
