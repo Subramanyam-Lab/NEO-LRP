@@ -102,8 +102,8 @@ pip install -r requirements.txt
 | `--dataset` | `P_prodhon`, `S_schneider`, `T_tuzun`, `B_barreto` | Benchmark dataset |
 | `--normalization` | `raw`, `minmax`, `cost_over_fi`, `cost_over_fi_minmax` | Use model trained with this target normalization |
 | `--N` | `110`, `1100`, `11000`, `110000` | Use model trained on N instances |
-| `--solver` | `vroom`, `ortools`, `vrpeasy` | VRP solver for route computation |
-| `--model_type` | `deepsets`, `graph_transformer` | Neural network architecture |
+| `--solver` | `vroom`, `ortools`, `vrpeasy` | VRP solver for generating final routes |
+| `--model_type` | `deepsets`, `graph_transformer` | Trained neural network architecture |
 | `--num_runs` | Integer >= 1 | Number of runs per instance |
 | `--instance` | (optional) | Single instance filename |
 
