@@ -1,6 +1,6 @@
 # Neural Embedded Optimization for Location-Routing Problems
 
-This repository contains the implementation and datasets for the Neural Embedded Optimization approach for solving Location-Routing Problems.
+This repository contains the implementation, datasets, pre-trained models, and training data for the Neural Embedded Optimization approach for solving Location-Routing Problems. We provide everything needed to reproduce our results: benchmark instances, pre-trained neural networks, data sampling and label generation scripts, and training code.
 
 **Naming Convention:** We refer to our approach as **NEO-LRP**. In the paper and codebase:
 - **NEO-DS** = NEO-LRP using DeepSets surrogate
