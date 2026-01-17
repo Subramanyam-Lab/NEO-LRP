@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.11-blue.svg)]()
 
-This repository contains the implementation, datasets, pre-trained models, and training data for the Neural Embedded Optimization approach for solving Location-Routing Problems. We provide everything needed to reproduce our results: benchmark instances, pre-trained neural networks, data sampling and label generation scripts, and training code.
+This repository contains the implementation, datasets, pre-trained models, and training data for the Neural Embedded Optimization approach for solving Location-Routing Problems. We provide everything needed to reproduce our results: benchmark instances, pre-trained neural networks, data sampling and label generation scripts, and training code. The original Graph Transformer related code was contributed by [Doyoung](https://github.com/2dozero) ([#8](https://github.com/Subramanyam-Lab/NEO-LRP/pull/8), [#10](https://github.com/Subramanyam-Lab/NEO-LRP/pull/10)) and [Dr. Kwon](https://github.com/chkwon) ([#9](https://github.com/Subramanyam-Lab/NEO-LRP/pull/9)), later restructured and integrated.
 
 **Naming Convention:** We refer to our approach as **NEO-LRP**. In the paper and codebase:
 - **NEO-DS** = NEO-LRP using DeepSets surrogate
