@@ -3,9 +3,9 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2412.05665-b31b1b.svg)](https://arxiv.org/abs/2412.05665)
 [![IISE preliminary](https://img.shields.io/badge/Preliminary-Paper-blue.svg)](https://drive.google.com/file/d/12TlysoLStWExp3q76sj4FWRbQJpa7LKM/view)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.9-blue.svg)]()
+[![Python](https://img.shields.io/badge/Python-3.11-blue.svg)]()
 
-This repository contains the implementation, datasets, pre-trained models, and training data for the Neural Embedded Optimization approach for solving Location-Routing Problems. We provide everything needed to reproduce our results: benchmark instances, pre-trained neural networks, data sampling and label generation scripts, and training code.
+This repository contains the implementation, datasets, pre-trained models, and training data for the Neural Embedded Optimization approach for solving Location-Routing Problems. We provide everything needed to reproduce our results: benchmark instances, pre-trained neural networks, data sampling and label generation scripts, and training code. The original Graph Transformer related code was contributed by [Doyoung](https://github.com/2dozero) ([#8](https://github.com/Subramanyam-Lab/NEO-LRP/pull/8), [#10](https://github.com/Subramanyam-Lab/NEO-LRP/pull/10)) and [Dr. Kwon](https://github.com/chkwon) ([#9](https://github.com/Subramanyam-Lab/NEO-LRP/pull/9)), later restructured and integrated.
 
 **Naming Convention:** We refer to our approach as **NEO-LRP**. In the paper and codebase:
 - **NEO-DS** = NEO-LRP using DeepSets surrogate
@@ -91,10 +91,13 @@ git lfs pull
 
 3. **Create Conda Environment**
 ```bash
-conda create --name neo_lrp python=3.9
-conda activate neo_lrp
+conda create --name neolrp python=3.11
+conda activate neolrp
 pip install -r requirements.txt
 ```
+> **Some Notes**
+> - For macOS users: If you encounter version conflicts, some packages (like `torch` and `ortools`) have different available versions on macOS vs Linux. Use `python -m pip install -r requirements.txt` to ensure packages install to the correct environment.
+> - In our current implementation we use [Gurobi-ML](https://gurobi-machinelearning.readthedocs.io/en/stable/) package to write the neural network constraints and solve the model using Gurobi and so a license is required and you can get one from [Gurobi Academic Program](https://www.gurobi.com/academia/academic-program-and-licenses/).
 
 ---
 
@@ -112,7 +115,7 @@ pip install -r requirements.txt
 | `--num_runs` | Integer >= 1 | Number of runs per instance |
 | `--instance` | (optional) | Single instance filename |
 
-If using `--solver vrpeasy`, you need to install the BaPCod binaries separately. Follow instructions at: https://github.com/inria-UFF/VRPSolverEasy
+If using `--solver vrpeasy`, you need to install the BaPCod binaries separately. Follow instructions at [VRPSolverEasy](https://github.com/inria-UFF/VRPSolverEasy).
 
 ### Using Python
 

@@ -431,6 +431,30 @@ def main():
     if args.num_runs < 1:
         raise ValueError("num_runs must be >= 1")
     
+    base_output_dir = os.path.join(args.output_dir, args.dataset)
+    os.makedirs(base_output_dir, exist_ok=True)
+    
+    log_filename = f"{args.dataset}_{args.model_type}_{args.N}_{args.normalization}_{args.solver}.log"
+    log_path = os.path.join(base_output_dir, log_filename)
+    
+    class Tee:
+        """Write to both terminal and log file."""
+        def __init__(self, *files):
+            self.files = files
+        def write(self, obj):
+            for f in self.files:
+                f.write(obj)
+                f.flush()
+        def flush(self):
+            for f in self.files:
+                f.flush()
+    
+    log_file = open(log_path, 'w')
+    sys.stdout = Tee(sys.stdout, log_file)
+    sys.stderr = Tee(sys.stderr, log_file)
+    
+    print(f"[logging to: {log_path}]")
+
     # Load config
     config_path = os.path.join(CONFIGS_DIR, f"{args.dataset}.json")
     config = load_config(config_path)
