@@ -26,11 +26,11 @@ This repository contains the implementation, datasets, pre-trained models, and t
 
 ```
 NEO-LRP/
-├── benchmark_instances/            # Benchmark datasets
-│   ├── B_barreto/                  # Barreto benchmark (12 instances)
-│   ├── P_prodhon/                  # Prodhon benchmark (30 instances)
-│   ├── S_schneider/                # Schneider benchmark (203 instances)
-│   └── T_tuzun/                    # Tuzun benchmark (36 instances)
+├── benchmark_instances/            # Benchmark datasets (compressed)
+│   ├── B_barreto.tar.gz            # Barreto benchmark (12 instances)
+│   ├── P_prodhon.tar.gz            # Prodhon benchmark (30 instances)
+│   ├── S_schneider.tar.gz          # Schneider benchmark (203 instances)
+│   └── T_tuzun.tar.gz              # Tuzun benchmark (36 instances)
 │
 ├── trained_models/                 # Pre-trained neural networks (requires git lfs pull)
 │   ├── deepsets/
@@ -83,13 +83,23 @@ git clone https://github.com/Subramanyam-Lab/NEO-LRP.git
 cd NEO-LRP
 ```
 
-2. **Pull Large Files (trained models and training data)**
+2. **Extract Benchmark Instances**
+```bash
+cd benchmark_instances
+tar -xzf B_barreto.tar.gz
+tar -xzf P_prodhon.tar.gz
+tar -xzf S_schneider.tar.gz
+tar -xzf T_tuzun.tar.gz
+cd ..
+```
+
+3. **Pull Large Files (trained models and training data)**
 ```bash
 git lfs install
 git lfs pull
 ```
 
-3. **Create Conda Environment**
+4. **Create Conda Environment**
 ```bash
 conda create --name neolrp python=3.11
 conda activate neolrp
