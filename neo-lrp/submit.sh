@@ -7,46 +7,57 @@
 #SBATCH --partition=sla-prio
 
 # Usage:
-#   sbatch --job-name=prodhon submit.sh P_prodhon cost_over_fi 110000 vroom 5
-#   sbatch --job-name=schneider --array=1-203 submit.sh S_schneider cost_over_fi 110000 vroom 1 instances.txt
-#   sbatch --job-name=tuzun submit.sh T_tuzun cost_over_fi 110000 vroom 5
-#   sbatch --job-name=barreto submit.sh B_barreto cost_over_fi 110000 vroom 5
+#   sbatch --job-name=prodhon_ds submit.sh P_prodhon cost_over_fi 110000 vroom deepsets 5
+#   sbatch --job-name=prodhon_gt submit.sh P_prodhon cost_over_fi 110000 vroom graph_transformer 5
+#   sbatch --job-name=schneider_ds --array=1-203 submit.sh S_schneider cost_over_fi 110000 vroom deepsets 1 configs/schneider_instances.txt
+#   sbatch --job-name=tuzun submit.sh T_tuzun cost_over_fi 110000 vroom deepsets 5
+#   sbatch --job-name=barreto submit.sh B_barreto cost_over_fi 110000 vroom deepsets 5
+#
+# Bash usage (remove/comment SBATCH lines first):
+#   bash submit.sh P_prodhon cost_over_fi 110000 vroom deepsets 5
 
 DATASET="$1"
 NORMALIZATION="$2"
 N="$3"
 SOLVER="$4"
-NUM_RUNS="$5"
-INSTANCES_FILE="${6:-}"  # optional
+MODEL_TYPE="$5"
+NUM_RUNS="$6"
+INSTANCES_FILE="${7:-}"  # optional
 
 # Validate required arguments
 if [[ -z "$DATASET" ]]; then
     echo "ERROR: DATASET (arg 1) is required"
-    echo "Usage: submit.sh DATASET NORMALIZATION N SOLVER NUM_RUNS [INSTANCES_FILE]"
+    echo "Usage: submit.sh DATASET NORMALIZATION N SOLVER MODEL_TYPE NUM_RUNS [INSTANCES_FILE]"
     exit 1
 fi
 
 if [[ -z "$NORMALIZATION" ]]; then
     echo "ERROR: NORMALIZATION (arg 2) is required"
-    echo "Usage: submit.sh DATASET NORMALIZATION N SOLVER NUM_RUNS [INSTANCES_FILE]"
+    echo "Usage: submit.sh DATASET NORMALIZATION N SOLVER MODEL_TYPE NUM_RUNS [INSTANCES_FILE]"
     exit 1
 fi
 
 if [[ -z "$N" ]]; then
     echo "ERROR: N (arg 3) is required"
-    echo "Usage: submit.sh DATASET NORMALIZATION N SOLVER NUM_RUNS [INSTANCES_FILE]"
+    echo "Usage: submit.sh DATASET NORMALIZATION N SOLVER MODEL_TYPE NUM_RUNS [INSTANCES_FILE]"
     exit 1
 fi
 
 if [[ -z "$SOLVER" ]]; then
     echo "ERROR: SOLVER (arg 4) is required"
-    echo "Usage: submit.sh DATASET NORMALIZATION N SOLVER NUM_RUNS [INSTANCES_FILE]"
+    echo "Usage: submit.sh DATASET NORMALIZATION N SOLVER MODEL_TYPE NUM_RUNS [INSTANCES_FILE]"
+    exit 1
+fi
+
+if [[ -z "$MODEL_TYPE" ]]; then
+    echo "ERROR: MODEL_TYPE (arg 5) is required"
+    echo "Usage: submit.sh DATASET NORMALIZATION N SOLVER MODEL_TYPE NUM_RUNS [INSTANCES_FILE]"
     exit 1
 fi
 
 if [[ -z "$NUM_RUNS" ]]; then
-    echo "ERROR: NUM_RUNS (arg 5) is required"
-    echo "Usage: submit.sh DATASET NORMALIZATION N SOLVER NUM_RUNS [INSTANCES_FILE]"
+    echo "ERROR: NUM_RUNS (arg 6) is required"
+    echo "Usage: submit.sh DATASET NORMALIZATION N SOLVER MODEL_TYPE NUM_RUNS [INSTANCES_FILE]"
     exit 1
 fi
 
@@ -75,6 +86,12 @@ if [[ "$SOLVER" != "vroom" && "$SOLVER" != "ortools" && "$SOLVER" != "vrpeasy" ]
     exit 1
 fi
 
+if [[ "$MODEL_TYPE" != "deepsets" && "$MODEL_TYPE" != "graph_transformer" ]]; then
+    echo "ERROR: Invalid MODEL_TYPE: $MODEL_TYPE"
+    echo "Must be one of: deepsets, graph_transformer"
+    exit 1
+fi
+
 if ! [[ "$NUM_RUNS" =~ ^[0-9]+$ ]] || [[ "$NUM_RUNS" -lt 1 ]]; then
     echo "ERROR: Invalid NUM_RUNS: $NUM_RUNS"
     echo "Must be a positive integer"
@@ -83,25 +100,30 @@ fi
 
 # Base paths
 BASE_DIR="/storage/group/azs7266/default/wzk5140/NEO-LRP"
-NEODS_DIR="${BASE_DIR}/neo-ds"
-CONFIGS_DIR="${NEODS_DIR}/configs"
+NEOLRP_DIR="${BASE_DIR}/neo-lrp"
+CONFIGS_DIR="${NEOLRP_DIR}/configs"
 BKS_DIR="${CONFIGS_DIR}/BKS"
 INSTANCES_DIR="${BASE_DIR}/benchmark_instances"
-MODELS_DIR="${BASE_DIR}/trained_models/deepsets"
+MODELS_DIR="${BASE_DIR}/trained_models"
 
-# Determine model type (scaled vs unscaled)
+# Determine scaled vs unscaled based on dataset
 if [[ "$DATASET" == "P_prodhon" || "$DATASET" == "S_schneider" ]]; then
-    MODEL_TYPE="scaled"
+    SCALE_TYPE="scaled"
 elif [[ "$DATASET" == "T_tuzun" || "$DATASET" == "B_barreto" ]]; then
-    MODEL_TYPE="unscaled"
+    SCALE_TYPE="unscaled"
 else
-    echo "ERROR: Unknown dataset for model type: $DATASET"
+    echo "ERROR: Unknown dataset for scale type: $DATASET"
     exit 1
 fi
 
 # Model paths (for validation only - run.py auto-discovers these)
-PHI_LOC="${MODELS_DIR}/${MODEL_TYPE}/phi/${NORMALIZATION}/${N}.onnx"
-RHO_LOC="${MODELS_DIR}/${MODEL_TYPE}/rho/${NORMALIZATION}/${N}.onnx"
+if [[ "$MODEL_TYPE" == "deepsets" ]]; then
+    PHI_LOC="${MODELS_DIR}/deepsets/${SCALE_TYPE}/phi/${NORMALIZATION}/${N}.onnx"
+    RHO_LOC="${MODELS_DIR}/deepsets/${SCALE_TYPE}/rho/${NORMALIZATION}/${N}.onnx"
+else
+    PHI_LOC="${MODELS_DIR}/graph_transformer/${SCALE_TYPE}/${NORMALIZATION}/${N}.pth"
+    RHO_LOC=""
+fi
 
 # Config and BKS paths (for validation only)
 CONFIG_PATH="${CONFIGS_DIR}/${DATASET}.json"
@@ -109,19 +131,19 @@ BKS_PATH="${BKS_DIR}/${DATASET}.json"
 INSTANCE_DIR="${INSTANCES_DIR}/${DATASET}"
 
 # Output directory
-OUTPUT_DIR="${NEODS_DIR}/output"
+OUTPUT_DIR="${NEOLRP_DIR}/output"
 
 # Environment setup
 source ~/.bashrc
 module load anaconda
 module load gurobi
 module load gcc
-conda activate /storage/group/azs7266/default/wzk5140/.conda/envs/hyperopt
+conda activate /storage/group/azs7266/default/wzk5140/.conda/envs/neolrp
 
-PYTHON="/storage/group/azs7266/default/wzk5140/.conda/envs/hyperopt/bin/python"
+PYTHON="/storage/group/azs7266/default/wzk5140/.conda/envs/neolrp/bin/python"
 
-# Change to neo-ds directory
-cd "${NEODS_DIR}"
+# Change to neo-lrp directory
+cd "${NEOLRP_DIR}"
 
 echo " ~~~~~ SLURM Job Info  ~~~~~"
 echo "Job ID:        ${SLURM_JOB_ID}"
@@ -132,8 +154,9 @@ echo "N:             ${N}"
 echo "Solver:        ${SOLVER}"
 echo "Num runs:      ${NUM_RUNS}"
 echo "Model type:    ${MODEL_TYPE}"
+echo "Scale type:    ${SCALE_TYPE}"
 echo "Phi model:     ${PHI_LOC}"
-echo "Rho model:     ${RHO_LOC}"
+echo "Rho model:     ${RHO_LOC:-N/A}"
 echo "Config:        ${CONFIG_PATH}"
 echo "BKS:           ${BKS_PATH}"
 echo "Instance dir:  ${INSTANCE_DIR}"
@@ -146,7 +169,7 @@ if [[ ! -f "$PHI_LOC" ]]; then
     exit 1
 fi
 
-if [[ ! -f "$RHO_LOC" ]]; then
+if [[ "$MODEL_TYPE" == "deepsets" && ! -f "$RHO_LOC" ]]; then
     echo "ERROR: Missing rho model: $RHO_LOC"
     exit 1
 fi
@@ -167,6 +190,7 @@ CMD="${PYTHON} run.py \
     --normalization ${NORMALIZATION} \
     --N ${N} \
     --solver ${SOLVER} \
+    --model_type ${MODEL_TYPE} \
     --num_runs ${NUM_RUNS} \
     --output_dir ${OUTPUT_DIR}"
 
