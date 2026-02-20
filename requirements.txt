@@ -20,7 +20,7 @@ onnx2torch==1.5.8
 onnxruntime==1.16.1
 openpyxl==3.1.2
 ortools==9.6.2534
-packaging==23.2
+packaging>=23.2
 pandas==2.0.3
 Pillow==10.0.0
 ply==3.11
