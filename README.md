@@ -32,7 +32,7 @@ NEO-LRP/
 │   ├── S_schneider.tar.gz          # Schneider benchmark (203 instances)
 │   └── T_tuzun.tar.gz              # Tuzun benchmark (36 instances)
 │
-├── trained_models/                 # Pre-trained neural networks (requires git lfs pull)
+├── trained_models/                 # Pre-trained neural networks
 │   ├── deepsets/
 │   │   ├── scaled/                 # For P_prodhon, S_schneider
 │   │   │   ├── phi/
@@ -60,7 +60,7 @@ NEO-LRP/
 │       └── solver.py               # CVRP solvers (VROOM, ORTools, VRPSolverEasy)
 │
 ├── training/                       # Training pipeline (see training/README.md)
-│   ├── data/                       # Pre-sampled training data (requires git lfs pull)
+│   ├── data/                       # Pre-sampled training data
 │   ├── sampling/                   # CVRP instance generation (GVS sampling)
 │   ├── labeling/                   # Label generation using VROOM
 │   └── scripts/                    # Training scripts
@@ -93,13 +93,7 @@ tar -xzf T_tuzun.tar.gz
 cd ..
 ```
 
-3. **Pull Large Files (trained models and training data)**
-```bash
-git lfs install
-git lfs pull
-```
-
-4. **Create Conda Environment**
+3. **Create Conda Environment**
 ```bash
 conda create --name neolrp python=3.11
 conda activate neolrp
@@ -125,7 +119,7 @@ pip install -r requirements.txt
 | `--num_runs` | Integer >= 1 | Number of runs per instance |
 | `--instance` | (optional) | Single instance filename |
 
-If using `--solver vrpeasy`, you need to install the BaPCod binaries separately. Follow instructions at [VRPSolverEasy](https://github.com/inria-UFF/VRPSolverEasy).
+If using `--solver vrpeasy`, you need to install [VRPSolverEasy](https://github.com/inria-UFF/VRPSolverEasy) separately.
 
 ### Using Python
 
@@ -194,7 +188,7 @@ The training pipeline consists of:
 2. **Label Generation** - Solve instances using VROOM to obtain routing cost labels
 3. **Model Training** - Train DeepSets or Graph Transformer architectures
 
-Pre-trained models and pre-sampled data are provided (requires `git lfs pull`).
+Pre-trained models and pre-sampled data are provided.
 
 ---
 
