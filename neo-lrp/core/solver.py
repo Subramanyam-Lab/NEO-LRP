@@ -15,7 +15,10 @@ import numpy as np
 
 import vroom
 from ortools.constraint_solver import pywrapcp, routing_enums_pb2
-from VRPSolverEasy.src import solver
+try:
+    from VRPSolverEasy.src import solver as vrpeasy_solver
+except ImportError:
+    vrpeasy_solver = None
 import pandas as pd
 
 def _to_int_or_none(val):
@@ -443,12 +446,14 @@ def solve_cvrp_vroom(cvrp_data, vroom_timeout=5):
 def solve_cvrp_vrpeasy(cvrp_data, vrpeasy_timeout=5):
     """
     Solve CVRP with VRPSolverEasy.
-    
+
     VRPSolverEasy supports float distances (unlike OR-Tools).
-    - rc_cal_index=0: int(100 * d) 
+    - rc_cal_index=0: int(100 * d)
     - rc_cal_index=1: raw float (no scaling needed)
     """
-    model = solver.Model()
+    if vrpeasy_solver is None:
+        raise ImportError("VRPSolverEasy is not installed. Install it from https://github.com/inria-UFF/VRPSolverEasy")
+    model = vrpeasy_solver.Model()
 
     fixed_cost = cvrp_data.fixed_route_cost
     use_integer = cvrp_data.use_integer_distances

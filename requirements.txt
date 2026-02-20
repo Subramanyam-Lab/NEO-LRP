@@ -25,6 +25,8 @@ pandas==2.0.3
 Pillow==10.0.0
 ply==3.11
 protobuf==4.23.1
+pyvroom==1.14.0
+torch_geometric==2.7.0
 Pyomo==6.6.1
 pyreadline3==3.4.1
 python-dateutil==2.8.2
