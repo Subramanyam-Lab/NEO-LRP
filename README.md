@@ -130,7 +130,7 @@ cd neo-lrp
 python run.py --dataset P_prodhon --normalization cost_over_fi --N 110000 --solver vroom --model_type deepsets --num_runs 5
 
 # Single instance
-python run.py --dataset S_schneider --instance 100-5-1a.json --normalization cost_over_fi --N 110000 --solver vroom --model_type deepsets --num_runs 1
+python run.py --dataset S_schneider --instance 100-5-1c.json --normalization cost_over_fi --N 110000 --solver vroom --model_type deepsets --num_runs 1
 ```
 
 ### Using Bash
