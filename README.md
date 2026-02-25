@@ -241,11 +241,14 @@ After running NEO-LRP on all benchmarks, see [`utils/tables_and_figures/README.m
 If you find this repository helpful, use our pre-trained models, code, or training data in your research, or work on similar problems, we would appreciate a citation to our papers:
 
 ```bibtex
-@article{kaleem2024neural,
-  title={Neural Embedded Mixed-Integer Optimization for Location-Routing Problems},
-  author={Kaleem, Waquar and Subramanyam, Anirudh},
-  journal={arXiv preprint arXiv:2412.05665},
-  year={2024}
+@article{kaleem2026neolrp,
+      title={Neural Embedded Mixed-Integer Optimization for Location-Routing Problems}, 
+      author={Waquar Kaleem and Doyoung Lee and Changhyun Kwon and Anirudh Subramanyam},
+      year={2026},
+      eprint={2412.05665},
+      archivePrefix={arXiv},
+      primaryClass={math.OC},
+      url={https://arxiv.org/abs/2412.05665}, 
 }
 
 @inproceedings{kaleem2024neuraliise,
