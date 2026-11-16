@@ -126,20 +126,9 @@ def plot_ecdf(df, value_col, filename, xlabel, ylabel, legend_bool):
     if value_col == "Time":
         ax.xaxis.set_major_formatter(FuncFormatter(lambda x, pos: f"{x/100:.0f}"))
     ax.set_xlabel(xlabel, labelpad=14)
-    if value_col != "Time":
-        ax.set_ylabel(ylabel)
-    if filename.endswith("gap_schneider_new"):
-        ax.text(
-            0.5, -0.28, r"(a)", transform=ax.transAxes,
-            ha="center", va="center",
-            fontsize=22
-        )
-    if filename.endswith("runtime_schneider_new"):
-        ax.text(
-            0.5, -0.28, r"(b)", transform=ax.transAxes,
-            ha="center", va="center",
-            fontsize=22
-        )
+
+    ax.text(0.5, -0.28, r"(d)", transform=ax.transAxes,
+            ha="center", va="center", fontsize=22)
     ax.grid(True, linestyle="--", alpha=0.5)
     if legend_bool:
         plt.legend(frameon=False)
@@ -156,7 +145,7 @@ plot_ecdf(
     filename="ecdf_gap_schneider_new",
     xlabel=r"$E^{\mathrm{gap}}_{\mathrm{BKS}}$ (\%)",
     ylabel="Instances (\%)",
-    legend_bool=False
+    legend_bool=True
 )
 plot_ecdf(
     df=df_ecdf,
