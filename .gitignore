@@ -185,3 +185,7 @@ wandb
 /benchmark_instances/T_tuzun/
 /benchmark_instances/B_barreto/
 /benchmark_instances/S_schneider/
+/utils/tables_and_figures/halns_ecdf_and_tables.zip
+/utils/tables_and_figures/voigt_halns_barreto.json
+/utils/tables_and_figures/voigt_halns_prodhon.json
+/utils/tables_and_figures/voigt_halns_tuzun.json
