@@ -1,5 +1,5 @@
 """
-Generate ECDF plots comparing NEO-DS against baseline methods (HCC-500K, TSBA_speed, GRASP/VNS) on the
+Generate ECDF plots comparing NEO-DS against baseline methods (HCC-500K, TSBA_speed, GRASP/VNS, HALNS) on the
 Prodhon benchmark. Produces plots for both optimization gap and runtime,
 along with summary statistics for paper discussion.
 """
@@ -39,6 +39,7 @@ parser.add_argument("--neods", type=str, default="true", help="Include NEO-DS (t
 parser.add_argument("--hcc", type=str, default="true", help="Include HCC-500K (true/false)")
 parser.add_argument("--tsba", type=str, default="true", help="Include TSBA_speed (true/false)")
 parser.add_argument("--grasp", type=str, default="true", help="Include GRASP/VNS (true/false)")
+parser.add_argument("--halns", type=str, default="true", help="Include HALNS (true/false)")
 args = parser.parse_args()
 
 include_methods = {
@@ -46,6 +47,7 @@ include_methods = {
     "HCC-500K": args.hcc.lower() == "true",
     "TSBA_speed": args.tsba.lower() == "true",
     "GRASP/VNS": args.grasp.lower() == "true",
+    "HALNS": args.halns.lower() == "true",
 }
 
 latex_file = "prodhon_sota_table_updated.tex"
@@ -59,6 +61,7 @@ instance_pattern = re.compile(
     r"(?P<hcc_gap>[-\d\.]+)\s*&\s*(?P<hcc_time>[-\d\.]+)\s*&\s*"
     r"(?P<tsb_gap>[-\d\.]+)\s*&\s*(?P<tsb_time>[-\d\.]+)\s*&\s*"
     r"(?P<grasp_gap>[-\d\.]+)\s*&\s*(?P<grasp_time>[-\d\.]+)\s*&\s*"
+    r"(?P<halns_gap>[-\d\.]+)\s*&\s*(?P<halns_time>[-\d\.]+)\s*&\s*"
     r"(?P<neos_gap>[-\d\.]+)\s*&\s*(?P<neos_la>[-\d\.]+)\s*&\s*(?P<neos_time>[-\d\.]+)"
 )
 
@@ -77,6 +80,7 @@ df_raw = pd.DataFrame(records).astype({
     "hcc_gap": float, "hcc_time": float,
     "tsb_gap": float, "tsb_time": float,
     "grasp_gap": float, "grasp_time": float,
+    "halns_gap": float, "halns_time": float,
     "neos_gap": float, "neos_time": float,
 })
 
@@ -87,6 +91,7 @@ methods = {
     "HCC-500K": ("hcc_gap", "hcc_time"),
     "TSBA_speed": ("tsb_gap", "tsb_time"),
     "GRASP/VNS": ("grasp_gap", "grasp_time"),
+    "HALNS": ("halns_gap", "halns_time"),
     "NEO-DS": ("neos_gap", "neos_time"),
 }
 
@@ -154,6 +159,7 @@ method_styles = {
     "HCC-500K": ecdf_styles["purple_solid_circle"],
     "TSBA_speed": ecdf_styles["orange_dash_circle"],
     "GRASP/VNS": ecdf_styles["green_dash_circle"],
+    "HALNS": ecdf_styles["blue_solid"],
     "NEO-DS": ecdf_styles["red_dashdot"],
 }
 
@@ -176,18 +182,10 @@ def plot_ecdf(df, value_col, filename, xlabel, ylabel, legend_bool):
             FuncFormatter(lambda x, pos: f"{x/100:.0f}")
         )
 
-    ax.set_xlabel(xlabel, labelpad=14)
+    ax.set_ylabel(ylabel)
 
-    if value_col != "Time":
-        ax.set_ylabel(ylabel)
-
-    if filename.endswith("gap_prodhon_new"):
-        ax.text(0.5, -0.28, r"(a)", transform=ax.transAxes,
-                ha="center", va="center", fontsize=22)
-
-    if filename.endswith("runtime_prodhon_new"):
-        ax.text(0.5, -0.28, r"(b)", transform=ax.transAxes,
-                ha="center", va="center", fontsize=22)
+    ax.text(0.5, -0.28, r"(a)", transform=ax.transAxes,
+            ha="center", va="center", fontsize=22)
 
     ax.grid(True, linestyle="--", alpha=0.5)
 
@@ -208,7 +206,7 @@ plot_ecdf(
     filename="ecdf_gap_prodhon_new",
     xlabel=r"$E^{\mathrm{gap}}_{\mathrm{BKS}}$ (\%)",
     ylabel="Instances (\%)",
-    legend_bool=False
+    legend_bool=True
 )
 
 plot_ecdf(
