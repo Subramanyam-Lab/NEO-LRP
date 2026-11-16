@@ -109,6 +109,7 @@ class createLRP():
 
         # phi embeddings
         if self.model_type == "deepsets":
+            depot_embedding = extract_onnx(np.zeros((1, 3), dtype=np.float64), phi_loc)[0]
             phi_final_outputs = {}
             for j in range(self.depotno):
                 phi_final_outputs[j] = extract_onnx(facility_dict[j].values, phi_loc)
@@ -153,12 +154,12 @@ class createLRP():
         u = m.addVars(self.depotno, vtype=GRB.CONTINUOUS, lb=0, name="dummy_route_cost")
 
         if self.model_type == "deepsets":
-            # DeepSets: z[j,l] = sum_i(x[j,i] * phi[j][i,l])
+            # DeepSets: z[j,l] = y[j] * depot_embedding[l] + sum_i(x[j,i] * phi[j][i,l])
             # phi[j] has N rows, row i = customer i
             for j in range(self.depotno):
                 for l in range(latent_space):
                     m.addConstr(
-                        z[j, l] == gp.quicksum(
+                        z[j, l] == depot_embedding[l].item() * y[j] + gp.quicksum(
                             x[j, i] * phi_final_outputs[j][i, l].item() 
                             for i in range(self.customer_no)
                         ),
