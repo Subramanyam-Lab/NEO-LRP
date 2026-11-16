@@ -1,5 +1,5 @@
 """
-Generate ECDF plots comparing NEO-DS against baseline methods (hcc-500k, tsba_speed, grasp/vns) on the barreto benchmark. reads neo-ds
+Generate latex table comparing NEO-DS against baseline methods (hcc-500k, tsba_speed, grasp/vns, halns) on the barreto benchmark. reads neo-ds
 results from excel and merges them into a pre-defined latex template with
 computed averages for all methods.
 """
@@ -43,41 +43,45 @@ latex_text = r"""
 \caption{Comparison with State-of-the-Art Heuristics on Barreto Benchmark}\label{tab:optimization_barreto} %
 \scriptsize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{}l r rr rr rr rrr@{}}
+\begin{tabular}{@{}l r rr rr rr rr rrr@{}}
 \toprule
 & & \multicolumn{2}{c}{HCC-500K}
   & \multicolumn{2}{c}{TSBA$_\text{speed}$}
   & \multicolumn{2}{c}{GRASP/VNS}
+  & \multicolumn{2}{c}{HALNS}
   & \multicolumn{3}{c}{NEO-DS} \\
-\cmidrule(r){3-4}\cmidrule(r){5-6}\cmidrule(r){7-8}\cmidrule(l){9-11}
+\cmidrule(r){3-4}\cmidrule(r){5-6}\cmidrule(r){7-8}\cmidrule(r){9-10}\cmidrule(l){11-13}
 Instance & BKS & $E^{\text{gap}}_{\text{BKS}}$ (\%) & $T_{\text{total}}$ (s)
+  & $E^{\text{gap}}_{\text{BKS}}$ (\%) & $T_{\text{total}}$ (s)
   & $E^{\text{gap}}_{\text{BKS}}$ (\%) & $T_{\text{total}}$ (s)
   & $E^{\text{gap}}_{\text{BKS}}$ (\%) & $T_{\text{total}}$ (s)
   & $E^{\text{gap}}_{\text{BKS}}$ (\%) & $T^{\text{LA}}$ (s) & $T_{\text{total}}$ (s) \\
 \midrule
-Christofides69-50x5 & 565.6  & 0.00 & 73  & 0.00 & 2  & 2.55 & 7  & - & - & - \\
-Christofides69-75x10 & 844.4  & 1.24 & 207  & 0.72 & 12  & 0.92 & 27  & - & - & - \\
-Christofides69-100x10 & 833.4  & 0.24 & 403  & 0.14 & 26  & 1.31 & 64  & - & - & - \\
-Daskin95-88x8 & 355.8  & 0.01 & 250  & 0.03 & 6  & 0.90 & 46  & - & - & - \\
-Daskin95-150x10 & 43919.9  & 1.31 & 613  & 0.38 & 52  & 0.82 & 345  & - & - & - \\
-Gaskell67-21x5 & 424.9  & 0.00 & 25  & 0.00 & 1  & 0.00 & 1  & - & - & - \\
-Gaskell67-22x5 & 585.1  & 0.00 & 21  & 0.00 & 0  & 0.00 & 1  & - & - & - \\
-Gaskell67-29x5 & 512.1  & 0.00 & 40  & 0.00 & 1  & 0.00 & 2  & - & - & - \\
-Gaskell67-32x5-1 & 562.2  & 0.00 & 58  & 0.00 & 1  & 0.00 & 2  & - & - & - \\
-Gaskell67-32x5-2 & 504.3  & 0.01 & 55  & 0.00 & 1  & 0.00 & 2  & - & - & - \\
-Gaskell67-36x5 & 460.4  & 0.01 & 61  & 0.00 & 1  & 0.00 & 2  & - & - & - \\
-Min92-27x5 & 3062.0  & 0.00 & 38  & 0.00 & 1  & 0.00 & 2  & - & - & - \\
-Min92-134x8 & 5709.0  & 0.41 & 460  & 0.23 & 29  & 1.11 & 166  & - & - & - \\
+Christofides69-50x5 & 565.6  & 0.00 & 73  & 0.00 & 2  & 2.55 & 7  & 0.00 & 54.96 & - & - & - \\
+Christofides69-75x10 & 844.4  & 1.24 & 207  & 0.72 & 12  & 0.92 & 27  & 0.53 & 120.92 & - & - & - \\
+Christofides69-100x10 & 833.4  & 0.24 & 403  & 0.14 & 26  & 1.31 & 64  & 0.07 & 196.76 & - & - & - \\
+Daskin95-88x8 & 355.8  & 0.01 & 250  & 0.03 & 6  & 0.90 & 46  & -0.01 & 91.74 & - & - & - \\
+Daskin95-150x10 & 43919.9  & 1.31 & 613  & 0.38 & 52  & 0.82 & 345  & 0.00 & 410.93 & - & - & - \\
+Gaskell67-21x5 & 424.9  & 0.00 & 25  & 0.00 & 1  & 0.00 & 1  & 0.00 & 24.90 & - & - & - \\
+Gaskell67-22x5 & 585.1  & 0.00 & 21  & 0.00 & 0  & 0.00 & 1  & 0.00 & 23.67 & - & - & - \\
+Gaskell67-29x5 & 512.1  & 0.00 & 40  & 0.00 & 1  & 0.00 & 2  & 0.00 & 29.05 & - & - & - \\
+Gaskell67-32x5-1 & 562.2  & 0.00 & 58  & 0.00 & 1  & 0.00 & 2  & 0.00 & 34.49 & - & - & - \\
+Gaskell67-32x5-2 & 504.3  & 0.01 & 55  & 0.00 & 1  & 0.00 & 2  & 0.01 & 32.52 & - & - & - \\
+Gaskell67-36x5 & 460.4  & 0.01 & 61  & 0.00 & 1  & 0.00 & 2  & -0.01 & 35.88 & - & - & - \\
+Min92-27x5 & 3062.0  & 0.00 & 38  & 0.00 & 1  & 0.00 & 2  & 0.00 & 28.55 & - & - & - \\
+Min92-134x8 & 5709.0  & 0.41 & 460  & 0.23 & 29  & 1.11 & 166  & 0.00 & 240.03 & - & - & - \\
 \midrule
 \multicolumn{2}{l}{Processor}
   & \multicolumn{2}{r}{Opteron 275}
   & \multicolumn{2}{r}{Xeon E5-2670}
   & \multicolumn{2}{r}{Xeon E5-2430v2}
+  & \multicolumn{2}{r}{Ryzen 9 3900X}
   & \multicolumn{3}{r}{Xeon Gold 6248R} \\
 \multicolumn{2}{l}{GHz}
   & \multicolumn{2}{r}{2.2}
   & \multicolumn{2}{r}{2.6}
   & \multicolumn{2}{r}{2.5}
+  & \multicolumn{2}{r}{3.8}
   & \multicolumn{3}{r}{3.00} \\
 \bottomrule
 \end{tabular}
@@ -89,12 +93,15 @@ def update_line(line):
     match = re.match(r"([A-Za-z0-9-]+)", line.strip())
     if match:
         instance = match.group(1)
+        if instance not in mapping.values():
+            return line
         parts = [p.strip() for p in line.split("&")]
+        parts[9] = f" {float(parts[9]):.0f} "
         if instance in neo_ds_dict:
             gap, t_la, t_total = neo_ds_dict[instance]
-            parts[8] = f" {gap:.2f} "
-            parts[9] = f" {t_la:.2f} "
-            parts[10] = f" {t_total:.2f} "
+            parts[10] = f" {gap:.2f} "
+            parts[11] = f" {t_la:.2f} "
+            parts[12] = f" {t_total:.2f} "
         return " & ".join(parts) + " \\\\"
     return line
 
@@ -107,7 +114,7 @@ for line in latex_text.splitlines():
         updated_line = update_line(line)
         new_lines.append(updated_line)
         parts = [p.strip().replace("\\\\", "") for p in updated_line.split("&")]
-        if len(parts) >= 11 and re.match(r"^[A-Za-z0-9-]+$", parts[0]):
+        if len(parts) >= 13 and re.match(r"^[A-Za-z0-9-]+$", parts[0]):
             instance = parts[0]
 
             def num(x):
@@ -119,8 +126,9 @@ for line in latex_text.splitlines():
             hcc_gap, hcc_t = num(parts[2]), num(parts[3])
             tsba_gap, tsba_t = num(parts[4]), num(parts[5])
             grasp_gap, grasp_t = num(parts[6]), num(parts[7])
+            halns_gap, halns_t = num(parts[8]), num(line.split("&")[9])
             ds_gap, ds_tla, ds_ttot = neo_ds_dict.get(instance, (None, None, None))
-            rows_data.append((hcc_gap, hcc_t, tsba_gap, tsba_t, grasp_gap, grasp_t, ds_gap, ds_tla, ds_ttot))
+            rows_data.append((hcc_gap, hcc_t, tsba_gap, tsba_t, grasp_gap, grasp_t, halns_gap, halns_t, ds_gap, ds_tla, ds_ttot))
     else:
         new_lines.append(line)
 
@@ -148,15 +156,18 @@ avg_tsba_gap = safe_avg([r[2] for r in rows_data])
 avg_tsba_t = safe_avg([r[3] for r in rows_data])
 avg_grasp_gap = safe_avg([r[4] for r in rows_data])
 avg_grasp_t = safe_avg([r[5] for r in rows_data])
-avg_ds_gap = safe_avg([r[6] for r in rows_data])
-avg_ds_tla = safe_avg([r[7] for r in rows_data])
-avg_ds_ttot = safe_avg([r[8] for r in rows_data])
+avg_halns_gap = safe_avg([r[6] for r in rows_data])
+avg_halns_t = safe_avg([r[7] for r in rows_data])
+avg_ds_gap = safe_avg([r[8] for r in rows_data])
+avg_ds_tla = safe_avg([r[9] for r in rows_data])
+avg_ds_ttot = safe_avg([r[10] for r in rows_data])
 
 avg_row = (
     "\\textbf{average} & "
     f"& \\textbf{{{fmt(avg_hcc_gap)}}} & \\textbf{{{fmt_int(avg_hcc_t)}}} "
     f"& \\textbf{{{fmt(avg_tsba_gap)}}} & \\textbf{{{fmt_int(avg_tsba_t)}}} "
     f"& \\textbf{{{fmt(avg_grasp_gap)}}} & \\textbf{{{fmt_int(avg_grasp_t)}}} "
+    f"& \\textbf{{{fmt(avg_halns_gap)}}} & \\textbf{{{fmt_int(avg_halns_t)}}} "
     f"& \\textbf{{{fmt(avg_ds_gap)}}} & \\textbf{{{fmt(avg_ds_tla)}}} & \\textbf{{{fmt(avg_ds_ttot)}}} \\\\"
 )
 
