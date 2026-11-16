@@ -181,3 +181,7 @@ wandb
 *.pdf
 *.png 
 *.tex
+/benchmark_instances/P_prodhon/
+/benchmark_instances/T_tuzun/
+/benchmark_instances/B_barreto/
+/benchmark_instances/S_schneider/
