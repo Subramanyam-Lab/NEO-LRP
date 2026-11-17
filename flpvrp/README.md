@@ -48,13 +48,3 @@ python plot_comparison.py
 
 **Expected outputs:**
 - `{instance}_FLPvsNEO_2x2.pdf` - 2×2 panel plots comparing FLP-VRP and NEO-DS solutions (presented in the paper)
-
-## Fit Closed-Form Approximations
-
-Fit Daganzo (DG) and Robuste (RB) to the scaled VROOM labels. From `flpvrp/`, run:
-
-```bash
-python ../training/scripts/train_closed_form/train.py
-```
-
-Equations, coefficients and prediction errors are saved to `../trained_models/closed_form/scaled.json`.
