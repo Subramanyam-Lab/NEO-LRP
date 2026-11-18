@@ -1,0 +1,14 @@
+{
+  "latent_space_dimension": 6,
+  "num_layers_phi": 5,
+  "num_layers_rho": 1,
+  "neurons_per_layer_phi": 32,
+  "neurons_per_layer_rho": 6,
+  "early_stopping_patience": 20,
+  "batch_size": 32,
+  "learning_rate": 0.001,
+  "num_epochs": 200,
+  "optimizer": "Adam",
+  "loss_function": "MSE",
+  "activation_function": "relu"
+}
