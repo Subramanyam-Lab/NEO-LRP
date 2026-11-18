@@ -1,0 +1,77 @@
+{
+  "campaign": "20261117_scaled_bapcod",
+  "export": "20261118_saved_labels_v1",
+  "generated_at_utc": "2026-11-18T08:57:23.575045+00:00",
+  "selection": "Only records with validated saved solver runs; original relative order, content and VROOM fields retained.",
+  "files": {
+    "test": {
+      "original_records": 10000,
+      "exported_records": 9968,
+      "excluded_records": 32,
+      "bytes": 41571380,
+      "sha256": "de89fc0c9e1de671085daad35e6939b3b45f657f3232d0cdb812110e3e03ffef"
+    },
+    "train_val": {
+      "original_records": 110000,
+      "exported_records": 109352,
+      "excluded_records": 648,
+      "bytes": 451755510,
+      "sha256": "c0297e6719ebb198ef06b65e1c224d82ac7b329a0b510a7c2a8e26001d43c57e"
+    }
+  },
+  "splits": {
+    "test": {
+      "included": 9968,
+      "optimal": 9495,
+      "source_vrpsolvereasy": 9585,
+      "recovered_from_saved_output": 471,
+      "feasible": 473,
+      "source_vroom": 383,
+      "excluded": 32
+    },
+    "train": {
+      "included": 98422,
+      "optimal": 93979,
+      "source_vrpsolvereasy": 94802,
+      "recovered_from_saved_output": 4515,
+      "feasible": 4443,
+      "source_vroom": 3620,
+      "excluded": 578
+    },
+    "validation": {
+      "included": 10930,
+      "optimal": 10407,
+      "source_vrpsolvereasy": 10513,
+      "feasible": 523,
+      "source_vroom": 417,
+      "recovered_from_saved_output": 449,
+      "excluded": 70
+    }
+  },
+  "totals": {
+    "included": 119320,
+    "optimal": 113881,
+    "source_vrpsolvereasy": 114900,
+    "recovered_from_saved_output": 5435,
+    "feasible": 5439,
+    "source_vroom": 4420,
+    "excluded": 680
+  },
+  "original_sources": {
+    "train_val.txt": {
+      "path": "/storage/group/azs7266/default/wzk5140/NEO-LRP/training/data/train_val.txt",
+      "sha256": "616533643ea9edec5de0ab16a4ba28055f5daf77419f41c5cced4e0d168b49c6",
+      "records": 110000
+    },
+    "test.txt": {
+      "path": "/storage/group/azs7266/default/wzk5140/NEO-LRP/training/data/test.txt",
+      "sha256": "eae7986350dcfa2ba2ce63b10a4789b9866c24afc67396da46a84cb274ccdece",
+      "records": 10000
+    }
+  },
+  "verified": "All original input checksums and every output record's original bytes after removing eight added fields; source order, index and split counts.",
+  "source_semantics": {
+    "vrpsolvereasy": "BaPCod produced the selected routes.",
+    "vroom": "Usable saved solver run retained the original feasible VROOM incumbent."
+  }
+}

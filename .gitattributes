@@ -2,3 +2,5 @@
 training/sampling/generation.sh linguist-generated
 training/data/test.txt filter=lfs diff=lfs merge=lfs -text
 training/data/train_val.txt filter=lfs diff=lfs merge=lfs -text
+training/data/vrpsolvereasy_scaled/*.txt filter=lfs diff=lfs merge=lfs -text
+training/data/vrpsolvereasy_scaled/index.csv filter=lfs diff=lfs merge=lfs -text
