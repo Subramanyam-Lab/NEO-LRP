@@ -10,7 +10,7 @@ __pycache__/
 *.onnx
 
 *.err
-*.out 
+*.out
 *.csv
 *.yaml
 
@@ -175,11 +175,11 @@ training/data/h5_cache/
 training/results
 output
 .dot
-.xlsx
+*.xlsx
 .json
 wandb
 *.pdf
-*.png 
+*.png
 *.tex
 /benchmark_instances/P_prodhon/
 /benchmark_instances/T_tuzun/
@@ -189,3 +189,6 @@ wandb
 /utils/tables_and_figures/voigt_halns_barreto.json
 /utils/tables_and_figures/voigt_halns_prodhon.json
 /utils/tables_and_figures/voigt_halns_tuzun.json
+
+/utils/tables_and_figures/**/solver_labels.json
+/utils/tables_and_figures/solver_labels.json
