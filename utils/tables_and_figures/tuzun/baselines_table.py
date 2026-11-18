@@ -1,43 +1,72 @@
 """
 Generate latex table comparing NEO-DS against state-of-the-art heuristics
-(HCC-500K, TSBA_speed, GRASP/VNS, HALNS) on the Tuzun-Burke benchmark. Reads NEO-DS
-results from Excel and merges them into a pre-defined latex template with
+(HCC-500K, TSBA_speed, GRASP/VNS, HALNS, GANCP) on the Tuzun-Burke benchmark. Reads NEO-DS
+results from Excel or CSV and merges them into a pre-defined latex template with
 computed averages for all methods.
 """
 import pandas as pd
 import re
 import numpy as np
+import argparse
+import json
+from pathlib import Path
 
-excel_ds = "NEO-LRP/neo-lrp/output/T_tuzun/T_tuzun_deepsets_110000_cost_over_fi_vroom.xlsx"
-
-df_ds = pd.read_excel(excel_ds, sheet_name="results", header=0)
-df_ds.columns = df_ds.columns.astype(str).str.strip()
+excel_ds = (Path(__file__).resolve().parents[3] /
+            "neo-lrp/output/T_tuzun/T_tuzun_deepsets_110000_cost_over_fi_vroom.xlsx")
 
 
 def normalize_instance(name: str) -> str:
     return name.replace("coordP", "").replace(".dat", "")
 
 
+parser = argparse.ArgumentParser(description="Generate baseline comparison table")
+parser.add_argument("--results", type=str, help="NEO-DS results CSV")
+args = parser.parse_args()
+
+if args.results:
+    df_ds = pd.read_csv(args.results, dtype={"Instance": str})
+else:
+    df_ds = pd.read_excel(excel_ds, sheet_name="results", header=0)
+    df_ds.columns = df_ds.columns.astype(str).str.strip()
+    df_ds["gap"] = df_ds["Optimization_gap_signed"]
+    df_ds["T_LA"] = df_ds["NN model execution time"]
+    df_ds["T_total"] = df_ds["NN model execution time"] + df_ds["vroom model solve time"]
+
 df_ds["Instance"] = df_ds["Instance"].apply(normalize_instance)
-df_ds["gap"] = df_ds["Optimization_gap_signed"]
-df_ds["T_LA"] = df_ds["NN model execution time"]
-df_ds["T_total"] = df_ds["NN model execution time"] + df_ds["vroom model solve time"]
 neo_ds_dict = {row["Instance"]: (row["gap"], row["T_LA"], row["T_total"]) for _, row in df_ds.iterrows()}
+neo_ds_std = {
+    row["Instance"]: (row.get("gap_std"), row.get("T_LA_std"), row.get("T_total_std"))
+    for _, row in df_ds.iterrows()
+}
+
+with (Path(__file__).resolve().parent.parent / "sobhanan_gancp_tuzun.json").open() as f:
+    gancp_results = json.load(f)["instances"]
+gancp_values = {}
+
+
+def format_ds(instance, value, column):
+    sd = neo_ds_std.get(instance, (None, None, None))[column]
+    if sd is None or pd.isna(sd):
+        return f"{value:.2f}"
+    return f"{value:.2f}" + rf"\(\pm {sd:.2f}\)"
+
 
 latex_text = r"""
 \begin{sidewaystable}
 \caption{Comparison with State-of-the-Art Heuristics on Tuzun-Burke Benchmark}\label{tab:optimization_tuzun} %
 \scriptsize
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{}l r rr rr rr rr rrr@{}}
+\setlength{\tabcolsep}{1pt}
+\begin{tabular}{@{}l r rr rr rr rr rr rrr@{}}
 \toprule
 & & \multicolumn{2}{c}{HCC-500K}
   & \multicolumn{2}{c}{TSBA$_\text{speed}$}
   & \multicolumn{2}{c}{GRASP/VNS}
   & \multicolumn{2}{c}{HALNS}
+  & \multicolumn{2}{c}{GANCP}
   & \multicolumn{3}{c}{NEO-DS} \\
-\cmidrule(r){3-4}\cmidrule(r){5-6}\cmidrule(r){7-8}\cmidrule(r){9-10}\cmidrule(l){11-13}
+\cmidrule(r){3-4}\cmidrule(r){5-6}\cmidrule(r){7-8}\cmidrule(r){9-10}\cmidrule(r){11-12}\cmidrule(l){13-15}
 Instance & BKS
+& $E^{\text{gap}}_{\text{BKS}}$ (\%) & $T_{\text{total}}$ (s)
 & $E^{\text{gap}}_{\text{BKS}}$ (\%) & $T_{\text{total}}$ (s)
 & $E^{\text{gap}}_{\text{BKS}}$ (\%) & $T_{\text{total}}$ (s)
 & $E^{\text{gap}}_{\text{BKS}}$ (\%) & $T_{\text{total}}$ (s)
@@ -86,12 +115,14 @@ Instance & BKS
   & \multicolumn{2}{r}{Xeon E5-2670}
   & \multicolumn{2}{r}{Xeon E5-2430v2}
   & \multicolumn{2}{r}{Ryzen 9 3900X}
+  & \multicolumn{2}{r}{Core i9-11900H}
   & \multicolumn{3}{r}{Xeon Gold 6248R} \\
 \multicolumn{2}{l}{GHz}
   & \multicolumn{2}{r}{2.2}
   & \multicolumn{2}{r}{2.6}
   & \multicolumn{2}{r}{2.5}
   & \multicolumn{2}{r}{3.8}
+  & \multicolumn{2}{r}{2.50}
   & \multicolumn{3}{r}{3.00}\\
 \bottomrule
 \end{tabular}
@@ -107,10 +138,16 @@ def update_line(line):
         parts[9] = f" {float(parts[9]):.0f} "
         if instance in neo_ds_dict:
             gap, t_la, t_total = neo_ds_dict[instance]
-            parts[10] = f" {gap:.2f} "
-            parts[11] = f" {t_la:.2f} "
-            parts[12] = f" {t_total:.2f} "
+            parts[10] = format_ds(instance, gap, 0)
+            parts[11] = format_ds(instance, t_la, 1)
+            parts[12] = format_ds(instance, t_total, 2)
         line = line.rstrip("\\").strip()
+        result = gancp_results[instance]
+        bks = float(parts[1])
+        gap = 100 * abs(result["best_cost"] - bks) / bks
+        runtime = result["runtime_s"]
+        gancp_values[instance] = (gap, runtime)
+        parts[10:10] = [f"{gap:.2f}", f"{runtime:.2f}"]
         return " & ".join(parts) + " \\\\"
     return line
 
@@ -155,9 +192,13 @@ avg_grasp_gap = safe_avg([r[4] for r in rows_data])
 avg_grasp_t = safe_avg([r[5] for r in rows_data])
 avg_halns_gap = safe_avg([r[6] for r in rows_data])
 avg_halns_t = safe_avg([r[7] for r in rows_data])
-avg_ds_gap = safe_avg([r[8] for r in rows_data])
-avg_ds_tla = safe_avg([r[9] for r in rows_data])
-avg_ds_ttot = safe_avg([r[10] for r in rows_data])
+avg_ds_gap, avg_ds_tla, avg_ds_ttot = neo_ds_dict.get("Average", (
+    safe_avg([r[8] for r in rows_data]),
+    safe_avg([r[9] for r in rows_data]),
+    safe_avg([r[10] for r in rows_data]),
+))
+avg_gancp_gap = safe_avg([r[0] for r in gancp_values.values()])
+avg_gancp_t = safe_avg([r[1] for r in gancp_values.values()])
 
 
 def fmt(val, dec=2):
@@ -178,7 +219,10 @@ avg_row = (
     f"& \\textbf{{{fmt(avg_tsba_gap)}}} & \\textbf{{{fmt_int(avg_tsba_t)}}} "
     f"& \\textbf{{{fmt(avg_grasp_gap)}}} & \\textbf{{{fmt_int(avg_grasp_t)}}} "
     f"& \\textbf{{{fmt(avg_halns_gap)}}} & \\textbf{{{fmt_int(avg_halns_t)}}} "
-    f"& \\textbf{{{fmt(avg_ds_gap)}}} & \\textbf{{{fmt(avg_ds_tla)}}} & \\textbf{{{fmt(avg_ds_ttot)}}} \\\\"
+    f"& \\textbf{{{fmt(avg_gancp_gap)}}} & \\textbf{{{fmt(avg_gancp_t)}}} "
+    f"& \\textbf{{{format_ds('Average', avg_ds_gap, 0)}}} "
+    f"& \\textbf{{{format_ds('Average', avg_ds_tla, 1)}}} "
+    f"& \\textbf{{{format_ds('Average', avg_ds_ttot, 2)}}} \\\\"
 )
 
 insert_index = None
@@ -198,4 +242,4 @@ new_latex = "\n".join(new_lines)
 with open("tuzun_sota_table_updated.tex", "w") as f:
     f.write(new_latex)
 
-print("Updated latex table written with averages for HCC, TSBA, GRASP/VNS, HALNS, and NEO-DS.")
+print("Updated latex table written with averages for HCC, TSBA, GRASP/VNS, HALNS, GANCP, and NEO-DS.")
