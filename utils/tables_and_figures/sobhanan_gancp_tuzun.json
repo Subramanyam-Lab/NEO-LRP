@@ -1,0 +1,158 @@
+{
+  "meta": {
+    "source": "Sobhanan, Park, Park, Kwon, Genetic Algorithms with Neural Cost Predictor for Solving Hierarchical Vehicle Routing Problems",
+    "url": "https://arxiv.org/abs/2310.14157v4",
+    "table": 15,
+    "method": "GANCP+",
+    "objective_statistic": "best cost",
+    "runtime_statistic": "reported time",
+    "runtime_cpu": "Intel Core i9-11900H",
+    "runtime_ghz": 2.5
+  },
+  "instances": {
+    "111112": {
+      "best_cost": 1500.42,
+      "runtime_s": 3.35
+    },
+    "111122": {
+      "best_cost": 1453.89,
+      "runtime_s": 2.99
+    },
+    "111212": {
+      "best_cost": 1427.53,
+      "runtime_s": 4.01
+    },
+    "111222": {
+      "best_cost": 1435.36,
+      "runtime_s": 3.97
+    },
+    "112112": {
+      "best_cost": 1217.84,
+      "runtime_s": 3.35
+    },
+    "112122": {
+      "best_cost": 1102.24,
+      "runtime_s": 3.5
+    },
+    "112212": {
+      "best_cost": 791.66,
+      "runtime_s": 3.21
+    },
+    "112222": {
+      "best_cost": 728.3,
+      "runtime_s": 3.15
+    },
+    "113112": {
+      "best_cost": 1285.25,
+      "runtime_s": 3.3
+    },
+    "113122": {
+      "best_cost": 1255.51,
+      "runtime_s": 3.32
+    },
+    "113212": {
+      "best_cost": 902.26,
+      "runtime_s": 3.28
+    },
+    "113222": {
+      "best_cost": 1051.2,
+      "runtime_s": 3.62
+    },
+    "121112": {
+      "best_cost": 2307.14,
+      "runtime_s": 3.34
+    },
+    "121122": {
+      "best_cost": 2264.78,
+      "runtime_s": 4.87
+    },
+    "121212": {
+      "best_cost": 2257.68,
+      "runtime_s": 3.69
+    },
+    "121222": {
+      "best_cost": 2276.02,
+      "runtime_s": 3.77
+    },
+    "122112": {
+      "best_cost": 2096.32,
+      "runtime_s": 3.25
+    },
+    "122122": {
+      "best_cost": 1712.32,
+      "runtime_s": 4.34
+    },
+    "122212": {
+      "best_cost": 1469.7,
+      "runtime_s": 3.08
+    },
+    "122222": {
+      "best_cost": 1160.78,
+      "runtime_s": 3.51
+    },
+    "123112": {
+      "best_cost": 1974.4,
+      "runtime_s": 4.36
+    },
+    "123122": {
+      "best_cost": 2102.32,
+      "runtime_s": 4.58
+    },
+    "123212": {
+      "best_cost": 1778.96,
+      "runtime_s": 3.33
+    },
+    "123222": {
+      "best_cost": 1423.86,
+      "runtime_s": 4.93
+    },
+    "131112": {
+      "best_cost": 1944.22,
+      "runtime_s": 3.42
+    },
+    "131122": {
+      "best_cost": 1880.57,
+      "runtime_s": 4.64
+    },
+    "131212": {
+      "best_cost": 2038.57,
+      "runtime_s": 3.18
+    },
+    "131222": {
+      "best_cost": 1879.86,
+      "runtime_s": 3.45
+    },
+    "132112": {
+      "best_cost": 1531.33,
+      "runtime_s": 3.9
+    },
+    "132122": {
+      "best_cost": 1446.68,
+      "runtime_s": 3.54
+    },
+    "132212": {
+      "best_cost": 1204.42,
+      "runtime_s": 3.01
+    },
+    "132222": {
+      "best_cost": 998.24,
+      "runtime_s": 3.05
+    },
+    "133112": {
+      "best_cost": 1757.34,
+      "runtime_s": 3.97
+    },
+    "133122": {
+      "best_cost": 1408.83,
+      "runtime_s": 4.01
+    },
+    "133212": {
+      "best_cost": 1217.5,
+      "runtime_s": 3.08
+    },
+    "133222": {
+      "best_cost": 1214.22,
+      "runtime_s": 3.99
+    }
+  }
+}
