@@ -30,19 +30,20 @@ BASE_DIR = os.path.dirname(SCRIPT_DIR)
 CONFIGS_DIR = os.path.join(SCRIPT_DIR, "configs")
 BKS_DIR = os.path.join(CONFIGS_DIR, "BKS")
 INSTANCES_DIR = os.path.join(BASE_DIR, "benchmark_instances")
-MODELS_DIR = os.path.join(BASE_DIR, "trained_models")  # No "deepsets" here
+MODELS_DIR = os.path.join(BASE_DIR, "trained_models")
 
 SCALED_DATASETS = ["P_prodhon", "S_schneider"]
 UNSCALED_DATASETS = ["T_tuzun", "B_barreto"]
 
 
-def get_model_paths(dataset, normalization, N, model_type):
-    """Get model paths based on dataset, normalization, N, and model type."""
+def get_model_paths(dataset, normalization, N, model_type, model_dir=None):
+    """Get model paths from the default or selected model directory."""
     model_subdir = "scaled" if dataset in SCALED_DATASETS else "unscaled"
     
     if model_type == "deepsets":
-        phi = os.path.join(MODELS_DIR, "deepsets", model_subdir, "phi", normalization, f"{N}.onnx")
-        rho = os.path.join(MODELS_DIR, "deepsets", model_subdir, "rho", normalization, f"{N}.onnx")
+        model_dir = model_dir or os.path.join(MODELS_DIR, "deepsets", model_subdir)
+        phi = os.path.join(model_dir, "phi", normalization, f"{N}.onnx")
+        rho = os.path.join(model_dir, "rho", normalization, f"{N}.onnx")
     else:  # graph_transformer
         phi = os.path.join(MODELS_DIR, "graph_transformer", model_subdir, normalization, f"{N}.pth")
         rho = None
@@ -415,18 +416,24 @@ def main():
     parser.add_argument('--normalization', type=str, required=True,
                         choices=['raw', 'minmax', 'cost_over_fi', 'cost_over_fi_minmax'])
     parser.add_argument('--N', type=int, required=True,
-                        choices=[110, 1100, 11000, 110000])
+                        help='Training sample count in the model filename')
     parser.add_argument('--solver', type=str, required=True,
                         choices=['vroom', 'ortools', 'vrpeasy'])
     parser.add_argument('--num_runs', type=int, required=True)
     parser.add_argument('--instance', type=str, default=None,
                         help='Single instance (array job mode)')
     parser.add_argument('--output_dir', type=str, default='output')
+    parser.add_argument('--model_dir', type=str, default=None,
+                        help='DeepSets model directory containing phi and rho')
     parser.add_argument('--model_type', type=str, default='deepsets',
                         choices=['deepsets', 'graph_transformer'],
                         help='Neural network architecture')
     
     args = parser.parse_args()
+    if args.N <= 0:
+        parser.error('--N must be positive')
+    if args.model_dir and args.model_type != 'deepsets':
+        parser.error('--model_dir is supported for deepsets only')
     
     if args.num_runs < 1:
         raise ValueError("num_runs must be >= 1")
@@ -460,7 +467,7 @@ def main():
     config = load_config(config_path)
     
     # Get model paths (now with model_type)
-    phi_loc, rho_loc = get_model_paths(args.dataset, args.normalization, args.N, args.model_type)
+    phi_loc, rho_loc = get_model_paths(args.dataset, args.normalization, args.N, args.model_type, args.model_dir)
     
     # Validate model paths
     if not os.path.exists(phi_loc):
