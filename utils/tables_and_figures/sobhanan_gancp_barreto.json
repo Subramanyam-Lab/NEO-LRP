@@ -1,0 +1,66 @@
+{
+  "meta": {
+    "source": "Sobhanan, Park, Park, Kwon, Genetic Algorithms with Neural Cost Predictor for Solving Hierarchical Vehicle Routing Problems",
+    "url": "https://arxiv.org/abs/2310.14157v4",
+    "table": 16,
+    "method": "GANCP+",
+    "objective_statistic": "best cost",
+    "runtime_statistic": "reported time",
+    "runtime_cpu": "Intel Core i9-11900H",
+    "runtime_ghz": 2.5
+  },
+  "instances": {
+    "Christofides69-50x5": {
+      "best_cost": 592.9,
+      "runtime_s": 2.9
+    },
+    "Christofides69-75x10": {
+      "best_cost": 855.8,
+      "runtime_s": 3.41
+    },
+    "Christofides69-100x10": {
+      "best_cost": 839.7,
+      "runtime_s": 3.13
+    },
+    "Daskin95-88x8": {
+      "best_cost": 355.8,
+      "runtime_s": 3.18
+    },
+    "Daskin95-150x10": {
+      "best_cost": 47303.6,
+      "runtime_s": 7.35
+    },
+    "Gaskell67-21x5": {
+      "best_cost": 429.6,
+      "runtime_s": 3.37
+    },
+    "Gaskell67-22x5": {
+      "best_cost": 585.1,
+      "runtime_s": 3.01
+    },
+    "Gaskell67-29x5": {
+      "best_cost": 512.1,
+      "runtime_s": 2.57
+    },
+    "Gaskell67-32x5-1": {
+      "best_cost": 562.2,
+      "runtime_s": 3.02
+    },
+    "Gaskell67-32x5-2": {
+      "best_cost": 504.3,
+      "runtime_s": 2.7
+    },
+    "Gaskell67-36x5": {
+      "best_cost": 460.4,
+      "runtime_s": 2.54
+    },
+    "Min92-27x5": {
+      "best_cost": 3062.0,
+      "runtime_s": 2.85
+    },
+    "Min92-134x8": {
+      "best_cost": 6112.0,
+      "runtime_s": 4.95
+    }
+  }
+}
