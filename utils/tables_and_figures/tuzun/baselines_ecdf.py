@@ -1,5 +1,5 @@
 """
-Generate ECDF plots comparing NEO-DS against baseline methods (HCC-500K, TSBA_speed, GRASP/VNS, HALNS) on the
+Generate ECDF plots comparing NEO-DS against baseline methods (HCC-500K, TSBA_speed, GRASP/VNS, HALNS, GANCP) on the
 Tuzun-Burke benchmark. Produces plots for both optimization gap and runtime,
 along with summary statistics for paper discussion.
 """
@@ -16,14 +16,16 @@ parser.add_argument("--hcc", type=str, default="true", help="Include HCC-500K (t
 parser.add_argument("--tsba", type=str, default="true", help="Include TSBA_speed (true/false)")
 parser.add_argument("--grasp", type=str, default="true", help="Include GRASP/VNS (true/false)")
 parser.add_argument("--halns", type=str, default="true", help="Include HALNS (true/false)")
+parser.add_argument("--gancp", type=str, default="true", help="Include GANCP (true/false)")
 args = parser.parse_args()
 
 include_methods = {
-    "NEO-DS": args.neods.lower() == "true",
     "HCC-500K": args.hcc.lower() == "true",
     "TSBA_speed": args.tsba.lower() == "true",
     "GRASP/VNS": args.grasp.lower() == "true",
     "HALNS": args.halns.lower() == "true",
+    "GANCP": args.gancp.lower() == "true",
+    "NEO-DS": args.neods.lower() == "true",
 }
 
 LINE_WIDTH_CURVES = 3
@@ -62,12 +64,14 @@ instance_pattern = re.compile(
     r"(?P<tsb_gap>[-\d\.]+)\s*&\s*(?P<tsb_time>[-\d\.]+)\s*&\s*"
     r"(?P<grasp_gap>[-\d\.]+)\s*&\s*(?P<grasp_time>[-\d\.]+)\s*&\s*"
     r"(?P<halns_gap>[-\d\.]+)\s*&\s*(?P<halns_time>[-\d\.]+)\s*&\s*"
+    r"(?P<gancp_gap>[-\d\.]+)\s*&\s*(?P<gancp_time>[-\d\.]+)\s*&\s*"
     r"(?P<neos_gap>[-\d\.]+)\s*&\s*(?P<neos_la>[-\d\.]+)\s*&\s*(?P<neos_time>[-\d\.]+)\s*(?:&.*?)?\s*\\\\",
     re.MULTILINE
 )
 
 records = []
 for line in lines:
+    line = re.sub(r"\\\(\\pm\s*[-\d.]+\\\)", "", line)
     match = instance_pattern.search(line)
     if match:
         d = match.groupdict()
@@ -85,6 +89,7 @@ df_raw = pd.DataFrame(records).astype({
     "tsb_gap": float, "tsb_time": float,
     "grasp_gap": float, "grasp_time": float,
     "halns_gap": float, "halns_time": float,
+    "gancp_gap": float, "gancp_time": float,
     "neos_gap": float, "neos_time": float
 })
 
@@ -96,6 +101,7 @@ methods = {
     "TSBA_speed": ("tsb_gap", "tsb_time"),
     "GRASP/VNS": ("grasp_gap", "grasp_time"),
     "HALNS": ("halns_gap", "halns_time"),
+    "GANCP": ("gancp_gap", "gancp_time"),
     "NEO-DS": ("neos_gap", "neos_time"),
 }
 
@@ -157,6 +163,11 @@ ecdf_styles = {
         marker=None,
         linewidth=LINE_WIDTH_CURVES
     ),
+    "brown_dash": dict(
+        color="#8C564B", linestyle="--",
+        marker=None,
+        linewidth=LINE_WIDTH_CURVES
+    ),
 }
 
 method_styles = {
@@ -164,6 +175,7 @@ method_styles = {
     "TSBA_speed": ecdf_styles["orange_dash_circle"],
     "GRASP/VNS": ecdf_styles["green_dash_circle"],
     "HALNS": ecdf_styles["blue_solid"],
+    "GANCP": ecdf_styles["brown_dash"],
     "NEO-DS": ecdf_styles["red_dashdot"],
 }
 
